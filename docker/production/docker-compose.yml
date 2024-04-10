@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  monitoring-db:
+    image: postgres:alpine3.19
+    env_file:
+      - ../../monitoring-backend/.env.production.local
+    ports:
+      - 5432:5432
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+  monitoring-backend:
+    build: ../../monitoring-backend
+    ports:
+      - 3000:3000
+    depends_on:
+      - monitoring-db
