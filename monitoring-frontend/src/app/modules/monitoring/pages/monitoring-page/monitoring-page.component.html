@@ -1,0 +1,23 @@
+<app-navbar></app-navbar>
+<div class="container mt-6">
+  <!-- <h1 class="text-4xl">Monitorias</h1> -->
+  <div class="monitoring-list">
+    @for (monitoring of monitoring; track monitoring.id) {
+      <p-card
+        class="monitoring-item"
+        [header]="monitoring.title"
+        [subheader]="monitoring.subject.name"
+      >
+        <p>{{ monitoring.description }}</p>
+        <ng-template pTemplate="footer">
+          <p-button
+            role="link"
+            label="Ver más"
+            icon="pi pi-arrow-right"
+            [routerLink]="['/monitoring', monitoring.id]"
+          ></p-button>
+        </ng-template>
+      </p-card>
+    }
+  </div>
+</div>
