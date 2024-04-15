@@ -10,5 +10,6 @@
     "SYNCRONIZE",
     "timestamptz",
     "typeorm"
-  ]
+  ],
+  "files.eol": "\n"
 }
