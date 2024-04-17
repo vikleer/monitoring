@@ -1,23 +1,47 @@
-<app-navbar></app-navbar>
-<div class="container mt-6">
-  <!-- <h1 class="text-4xl">Monitorias</h1> -->
-  <div class="monitoring-list">
-    @for (monitoring of monitoring; track monitoring.id) {
-      <p-card
-        class="monitoring-item"
-        [header]="monitoring.title"
-        [subheader]="monitoring.subject.name"
-      >
-        <p>{{ monitoring.description }}</p>
-        <ng-template pTemplate="footer">
-          <p-button
-            role="link"
-            label="Ver más"
-            icon="pi pi-arrow-right"
-            [routerLink]="['/monitoring', monitoring.id]"
-          ></p-button>
-        </ng-template>
-      </p-card>
-    }
+<main class="page-layout">
+  <app-navbar></app-navbar>
+  <div class="flex-1 container border-round-md bg-white my-6 p-3">
+    <h1 class="text-gray-600 mb-3">Monitorias</h1>
+    <span class="p-input-icon-left mb-6 w-full">
+      <i class="pi pi-search"></i>
+      <input
+        type="text"
+        pInputText
+        placeholder="Busque por título o descripción"
+        [formControl]="searchControl"
+        class="w-full"
+      />
+    </span>
+    <div class="monitoring-list">
+      @for (monitoring of monitoring; track monitoring.id) {
+        <div
+          class="monitoring-item flex flex-column justify-content-between shadow-1 border-round"
+        >
+          <header class="mb-3">
+            <img
+              alt="Card"
+              src="https://primefaces.org/cdn/primeng/images/usercard.png"
+              class="border-round-top"
+            />
+          </header>
+          <div class="text-gray-500 p-3">
+            <h2 class="text-lg">{{ monitoring.title }}</h2>
+            <p class="text-md font-semibold text-gray-400 mb-2">
+              {{ monitoring.subject.name }}
+            </p>
+            <p>{{ monitoring.description }}</p>
+          </div>
+          <footer class="p-3">
+            <p-button
+              role="link"
+              label="Ver más"
+              icon="pi pi-arrow-right"
+              [routerLink]="['/monitoring', monitoring.id]"
+            ></p-button>
+          </footer>
+        </div>
+      }
+    </div>
   </div>
-</div>
+  <app-footer></app-footer>
+</main>

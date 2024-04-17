@@ -1,4 +1,90 @@
-<app-navbar></app-navbar>
-@if (monitoringId) {
-  <p>Monitoring {{ monitoringId }}</p>
-}
+<main class="page-layout">
+  <app-navbar></app-navbar>
+  <div class="flex-1 text-gray-600 container border-round-md bg-white my-6 p-3">
+    <h1>{{ monitoring.title }}</h1>
+    <h2 class="mb-3">{{ monitoring.subject.name }}</h2>
+    <p class="mb-3">
+      <span class="font-bold">Monitor </span>
+      <span>
+        {{ monitoring.createdBy.profile.firstName }}
+        {{ monitoring.createdBy.profile.lastName }}
+      </span>
+    </p>
+    <p class="mb-3">{{ monitoring.description }}</p>
+    <p-button
+      icon="pi pi-calendar"
+      label="Agendar"
+      (click)="openAgendasCalendarModal()"
+    ></p-button>
+  </div>
+  <app-footer></app-footer>
+</main>
+
+<p-dialog
+  header="Disponibilidades"
+  [(visible)]="isAgendasCalendarOpen"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+>
+  <div class="flex justify-content-center">
+    <p-calendar
+      class="monitoring-agendas-calendar max-w-full"
+      [inline]="true"
+      [showWeek]="true"
+      [disabledDates]="disabledDates"
+      [disabled]="isAgendasCalendarDisabled"
+      (onMonthChange)="setCurrentMonth($event)"
+      (onSelect)="openAgendaDetailModal($event)"
+    >
+    </p-calendar>
+  </div>
+</p-dialog>
+
+<p-confirmDialog [dismissableMask]="true">
+  <ng-template pTemplate="message" let-message>
+    <div>
+      <p class="mb-3">{{ message.message }}</p>
+      @if (selectedMonitoringAgenda) {
+        <div class="flex flex-column gap-1">
+          <p>
+            <span class="font-bold">Monitor </span>
+            <span>
+              {{ monitoring.createdBy.profile.firstName }}
+              {{ monitoring.createdBy.profile.lastName }}
+            </span>
+          </p>
+          <p>
+            <span class="font-bold">Asignatura </span>
+            <span>{{ monitoring.subject.name }}</span>
+          </p>
+          <p>
+            <span class="font-bold">Inicia </span>
+            <span>
+              {{
+                selectedMonitoringAgenda.startDate | date: "yyyy-MM-dd h:mm a"
+              }}
+            </span>
+          </p>
+          <p>
+            <span class="font-bold">Finaliza </span>
+            <span>
+              {{ selectedMonitoringAgenda.endDate | date: "yyyy-MM-dd h:mm a" }}
+            </span>
+          </p>
+          <p>
+            <span class="font-bold">Plazas agendas </span>
+            <span>
+              {{ selectedMonitoringAgenda.placesTaken }}/{{
+                monitoring.maxAvailablePlaces
+              }}
+            </span>
+          </p>
+        </div>
+      }
+    </div>
+  </ng-template>
+</p-confirmDialog>
+
+<p-toast></p-toast>

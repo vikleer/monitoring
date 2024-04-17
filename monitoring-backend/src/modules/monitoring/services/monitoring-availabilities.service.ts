@@ -107,7 +107,7 @@ export class MonitoringAvailabilitiesService {
       });
 
     if (!monitoringAvailability) {
-      throw new NotFoundException("Availability not found");
+      throw new NotFoundException("Disponibilidad no encontrada.");
     }
 
     // Check if the requesting user can update the availability

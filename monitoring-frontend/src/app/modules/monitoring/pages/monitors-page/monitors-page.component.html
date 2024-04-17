@@ -1,0 +1,14 @@
+<main class="page-layout">
+  <app-navbar></app-navbar>
+  <div class="flex-1 text-gray-600 container border-round-md bg-white my-6 p-3">
+    <h1 class="text-gray-600">Monitores</h1>
+    <p-tabMenu
+      styleClass="mb-3"
+      [model]="items"
+      [activeItem]="activeItem"
+      (activeItemChange)="onActiveItemChange($event)"
+    ></p-tabMenu>
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
+</main>

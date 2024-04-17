@@ -55,7 +55,8 @@ export class MonitoringService {
       where: { id: createMonitoringDto.subjectId },
     });
 
-    if (!degreeSubject) throw new NotFoundException("Degree subject not found");
+    if (!degreeSubject)
+      throw new NotFoundException("Asignatura no encontrada.");
 
     // save just the first availability
     const [availability] = createMonitoringDto.availabilities;
@@ -100,7 +101,14 @@ export class MonitoringService {
       .innerJoinAndSelect("monitoring.subject", "subject")
       .innerJoinAndSelect("monitoring.availabilities", "availabilities");
 
-    // Filter by title, description, createdBy, and subject
+    // Filter by keyword, title, description, createdBy, and subject
+    if (findAllMonitoringDto.keyword) {
+      queryBuilder.andWhere(
+        "monitoring.title ILIKE :keyword OR monitoring.description ILIKE :keyword",
+        { keyword: `%${findAllMonitoringDto.keyword}%` },
+      );
+    }
+
     if (findAllMonitoringDto.title) {
       queryBuilder.andWhere("monitoring.title ILIKE :title", {
         title: `%${findAllMonitoringDto.title}%`,
@@ -144,10 +152,16 @@ export class MonitoringService {
     // Find the monitoring record
     const monitoring = await this.monitoringRepository.findOne({
       where: { id: monitoringId },
-      relations: { createdBy: true, subject: true, availabilities: true },
+      relations: {
+        createdBy: {
+          profile: true,
+        },
+        subject: true,
+        availabilities: true,
+      },
     });
 
-    if (!monitoring) throw new NotFoundException("Monitoring not found");
+    if (!monitoring) throw new NotFoundException("Monitoria no encontrada.");
 
     return monitoring;
   }
@@ -174,7 +188,7 @@ export class MonitoringService {
     });
 
     if (!monitoringToUpdate) {
-      throw new NotFoundException("Monitoring not found");
+      throw new NotFoundException("Monitoria no encontrada.");
     }
 
     // Check if the user has permission to update the monitoring
@@ -200,7 +214,7 @@ export class MonitoringService {
         where: { id: updateMonitoringDto.subjectId },
       });
 
-      if (!subject) throw new NotFoundException("Degree subject not found");
+      if (!subject) throw new NotFoundException("Asignatura no encontrada.");
 
       monitoringToUpdate.subject = subject;
     }
@@ -224,7 +238,7 @@ export class MonitoringService {
     });
 
     if (!monitoringToRemove) {
-      throw new NotFoundException("Monitoring not found");
+      throw new NotFoundException("Monitoria no encontrada.");
     }
 
     // Check if the user has permission to remove the monitoring
