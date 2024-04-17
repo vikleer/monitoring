@@ -6,6 +6,14 @@ import { IsOptional, IsString, IsUUID } from "class-validator";
 export class FindAllMonitoringDto extends WithPagination {
   @ApiPropertyOptional({
     format: "string",
+    example: "Matemática",
+  })
+  @IsOptional()
+  @IsString()
+  public keyword?: string;
+
+  @ApiPropertyOptional({
+    format: "string",
     example: "Aula de Matemática",
   })
   @IsOptional()

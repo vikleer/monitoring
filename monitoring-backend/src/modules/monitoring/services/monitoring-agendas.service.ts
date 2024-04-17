@@ -40,7 +40,7 @@ export class MonitoringAgendasService {
       relations: { subject: true, createdBy: true },
     });
 
-    if (!monitoring) throw new NotFoundException("Monitoring not found.");
+    if (!monitoring) throw new NotFoundException("Monitoria no encontrada.");
 
     // Create the monitoring agenda.
     const monitoringAgenda = await this.monitoringAgendasRepository.save({

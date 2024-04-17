@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { monitoringResolver } from "@src/app/modules/monitoring/resolvers/monitoring.resolver";
 
 export const routes: Routes = [
   {
@@ -9,10 +10,53 @@ export const routes: Routes = [
       ),
   },
   {
+    path: "students",
+    loadComponent: () =>
+      import("./pages/students-page/students-page.component").then(
+        (m) => m.StudentsPageComponent,
+      ),
+    children: [
+      {
+        path: "",
+        redirectTo: "my-agenda",
+        pathMatch: "full",
+      },
+      {
+        path: "my-agenda",
+        loadComponent: () =>
+          import("./pages/my-agenda-page/my-agenda-page.component").then(
+            (m) => m.MyAgendaPageComponent,
+          ),
+      },
+    ],
+  },
+  {
+    path: "monitors",
+    loadComponent: () =>
+      import("./pages/monitors-page/monitors-page.component").then(
+        (m) => m.MonitorsPageComponent,
+      ),
+    children: [
+      {
+        path: "",
+        redirectTo: "my-monitoring",
+        pathMatch: "full",
+      },
+      {
+        path: "my-monitoring",
+        loadComponent: () =>
+          import(
+            "./pages/my-monitoring-page/my-monitoring-page.component"
+          ).then((m) => m.MyMonitoringPageComponent),
+      },
+    ],
+  },
+  {
     path: ":id",
     loadComponent: () =>
       import(
         "./pages/monitoring-detail-page/monitoring-detail-page.component"
       ).then((m) => m.MonitoringDetailPageComponent),
+    resolve: { monitoring: monitoringResolver },
   },
 ];

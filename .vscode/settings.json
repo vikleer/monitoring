@@ -2,12 +2,17 @@
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "cSpell.words": [
     "casl",
+    "confirmdialog",
+    "dismissable",
     "dtos",
     "ILIKE",
     "mergepermissions",
+    "Pereira",
     "postgres",
+    "primeng",
     "readcsv",
     "SYNCRONIZE",
+    "tabmenu",
     "timestamptz",
     "typeorm"
   ],

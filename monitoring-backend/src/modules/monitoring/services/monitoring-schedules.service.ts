@@ -1,7 +1,6 @@
 import { ForbiddenError } from "@casl/ability";
 import {
   ConflictException,
-  ForbiddenException,
   Inject,
   Injectable,
   NotFoundException,
@@ -65,7 +64,7 @@ export class MonitoringSchedulesService {
   ): Promise<MonitoringSchedule[]> {
     const monitoringSchedules = await this.monitoringSchedulesRepository.find({
       where: { user: { id: findAllMonitoringSchedulesDto.userId } },
-      relations: { agenda: true, user: true },
+      relations: { agenda: { monitoring: { subject: true } }, user: true },
     });
 
     const requestingUser = this.request.user!.entity;
@@ -116,7 +115,7 @@ export class MonitoringSchedulesService {
     });
 
     if (!monitoringToSchedule) {
-      throw new NotFoundException("Monitoring not found.");
+      throw new NotFoundException("Monitoria no encontrada.");
     }
 
     // Check if monitoring agenda is valid
@@ -127,7 +126,7 @@ export class MonitoringSchedulesService {
     });
 
     if (!isValidAgenda) {
-      throw new NotFoundException("Monitoring agenda not found.");
+      throw new NotFoundException("Agenda de monitoria no encontrada.");
     }
 
     // Check if monitoring agenda exists
@@ -139,7 +138,7 @@ export class MonitoringSchedulesService {
     });
 
     if (requestingUser.id === monitoringToSchedule.createdBy.id) {
-      throw new ConflictException("You cannot schedule your own monitoring.");
+      throw new ConflictException("No puede agendar su propia monitoria.");
     }
 
     // If monitoring agenda does not exist, create it
@@ -164,14 +163,14 @@ export class MonitoringSchedulesService {
     // If user already scheduled this monitoring agenda, throw an error
     if (monitoringSchedule) {
       throw new ConflictException(
-        "User already scheduled this monitoring agenda.",
+        "Ya ha agendado esta u otra monitoria para esta fecha.",
       );
     }
 
     if (
       monitoringAgenda.placesTaken >= monitoringToSchedule.maxAvailablePlaces
     ) {
-      throw new ConflictException("Monitoring agenda is full.");
+      throw new ConflictException("La agenda de la monitoria está completa.");
     }
 
     // Update monitoring agenda places taken
@@ -201,7 +200,8 @@ export class MonitoringSchedulesService {
       },
     );
 
-    if (!monitoringSchedule) throw new NotFoundException("Schedule not found.");
+    if (!monitoringSchedule)
+      throw new NotFoundException("Fecha de monitoria no encontrada.");
 
     // Check if the user has permission to unschedule the monitoring
     const requestingUser = this.request.user!.entity;
