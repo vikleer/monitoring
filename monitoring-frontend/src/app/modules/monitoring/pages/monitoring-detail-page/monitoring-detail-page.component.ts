@@ -13,8 +13,15 @@ import { Monitoring } from "@src/app/modules/monitoring/entities/monitoring";
 import { MonitoringAgenda } from "@src/app/modules/monitoring/entities/monitoring-agenda";
 import { MonitoringAgendasService } from "@src/app/modules/monitoring/services/monitoring-agendas/monitoring-agendas.service";
 import { MonitoringSchedulesService } from "@src/app/modules/monitoring/services/monitoring-schedules/monitoring-schedules.service";
-import { MonitoringService } from "@src/app/modules/monitoring/services/monitoring-service/monitoring.service";
-import { getMonth, getTime, parseISO } from "date-fns";
+import { MonitoringService } from "@src/app/modules/monitoring/services/monitoring/monitoring.service";
+import {
+  getDate,
+  getMonth,
+  getTime,
+  getYear,
+  parseISO,
+  setHours,
+} from "date-fns";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { CalendarModule, CalendarMonthChangeEvent } from "primeng/calendar";
@@ -57,7 +64,12 @@ export class MonitoringDetailPageComponent implements OnInit {
   public isAgendasCalendarOpen = false;
   public isAgendasCalendarDisabled = true;
   public currentMonth = getMonth(new Date());
-  public disabledDates: Date[] = getDatesInMonth(this.currentMonth);
+  public currentYear = getYear(new Date());
+  public disabledDates: Date[] = getDatesInMonth({
+    month: this.currentMonth,
+    year: this.currentYear,
+  });
+  public datesToSkip: Date[] = [];
 
   public isAgendaDetailModalOpen = false;
 
@@ -81,7 +93,7 @@ export class MonitoringDetailPageComponent implements OnInit {
 
     this.confirmationService.confirm({
       header: "Agendar monitoria",
-      message: " Por favor, confirme para seguir adelante.",
+      message: " Por favor, confirme para seguir adelante",
       acceptIcon: "pi pi-check mr-2",
       rejectIcon: "pi pi-times mr-2",
       rejectButtonStyleClass: "p-button-sm",
@@ -120,30 +132,40 @@ export class MonitoringDetailPageComponent implements OnInit {
   }
 
   public setCurrentMonth(event: CalendarMonthChangeEvent): void {
-    if (!event.month) return;
+    if (!event.month || !event.year) return;
     this.currentMonth = event.month - 1;
+    this.currentYear = event.year;
     this.setupMonitoringAgendas();
   }
 
   public calculateDisabledDates(): Date[] {
     // Dates to skip are the dates that have available places and are in the future
-    const datesToSkip = this.monitoringAgendas
+    this.datesToSkip = this.monitoringAgendas
       .filter((agenda) => {
-        const agendaDate = parseISO(splitDate(agenda.startDate));
+        const agendaStartDate = new Date(agenda.startDate);
+        agendaStartDate.setHours(0, 0, 0, 0);
+
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
 
         const hasAvailablePlaces =
           agenda.placesTaken < this.monitoring.maxAvailablePlaces;
 
-        const isInFuture = getTime(agendaDate) > getTime(new Date());
+        const isInFuture = getTime(agendaStartDate) > getTime(currentDate);
 
         return hasAvailablePlaces && isInFuture;
       })
       .map((agenda) => {
-        return parseISO(agenda.startDate.split("T")[0]);
+        const date = new Date(agenda.startDate);
+        date.setHours(0, 0, 0, 0);
+
+        return date;
       });
 
-    const disabledDates = getDatesInMonth(this.currentMonth, {
-      datesToSkip,
+    const disabledDates = getDatesInMonth({
+      month: this.currentMonth,
+      year: this.currentYear,
+      datesToSkip: this.datesToSkip,
     });
 
     return disabledDates;
@@ -155,8 +177,10 @@ export class MonitoringDetailPageComponent implements OnInit {
     this.monitoringAgendaService
       .findAll({
         monitoringId: this.monitoring.id,
-        startDate: formatDate(getStartOfMonth(this.currentMonth)),
-        endDate: formatDate(getEndOfMonth(this.currentMonth)),
+        startDate: formatDate(
+          getStartOfMonth(this.currentMonth, this.currentYear),
+        ),
+        endDate: formatDate(getEndOfMonth(this.currentMonth, this.currentYear)),
       })
       .subscribe({
         next: (agendas) => {
@@ -165,5 +189,11 @@ export class MonitoringDetailPageComponent implements OnInit {
           this.isAgendasCalendarDisabled = false;
         },
       });
+  }
+
+  public isAvailableDate(date: { day: number; otherMonth: boolean }): boolean {
+    return this.datesToSkip.some((dateToSkip) => {
+      return getDate(dateToSkip) === date.day && !date.otherMonth;
+    });
   }
 }

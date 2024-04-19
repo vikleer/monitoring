@@ -1,44 +1,117 @@
+<p-toast></p-toast>
+
 <div class="mt-3">
-  <p-table [value]="monitoringSchedules">
-    <ng-template pTemplate="header">
-      <tr>
-        <th id="title">Título</th>
-        <th id="subject">Asignatura</th>
-        <th id="start">Inicia</th>
-        <th id="end">Finaliza</th>
-        <th id="actions">Acciones</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-monitoringSchedule>
-      <tr>
-        <td>{{ monitoringSchedule.agenda.monitoring.title }}</td>
-        <td>{{ monitoringSchedule.agenda.monitoring.subject.name }}</td>
-        <td>
-          {{ monitoringSchedule.agenda.startDate | date: "yyyy-MM-dd h:mm a" }}
-        </td>
-        <td>
-          {{ monitoringSchedule.agenda.endDate | date: "yyyy-MM-dd h:mm a" }}
-        </td>
-        <td>
-          <div class="flex gap-2">
-            <p-button
-              role="link"
-              icon="pi pi-info"
-              [routerLink]="[
-                '/monitoring',
-                monitoringSchedule.agenda.monitoring.id
-              ]"
-              [rounded]="true"
-              [outlined]="true"
-            ></p-button>
-            <p-button
-              icon="pi pi-ban"
-              [rounded]="true"
-              [outlined]="true"
-            ></p-button>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+  <p class="mb-3">Aquí puede ver las monitorias que ha agendado</p>
+
+  @if (monitoringSchedules.length === 0) {
+    <p class="text-gray-600">No hay monitorias agendadas</p>
+  }
+
+  @if (monitoringSchedules.length > 0) {
+    <p-table [value]="monitoringSchedules">
+      <ng-template pTemplate="header">
+        <tr>
+          <th id="title">Título</th>
+          <th id="subject">Asignatura</th>
+          <th id="start">Inicia</th>
+          <th id="end">Finaliza</th>
+          <th id="actions">Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-monitoringSchedule>
+        <tr class="white-space-nowrap">
+          <td>{{ monitoringSchedule.agenda.monitoring.title }}</td>
+          <td>{{ monitoringSchedule.agenda.monitoring.subject.name }}</td>
+          <td>
+            {{
+              monitoringSchedule.agenda.startDate | date: "yyyy-MM-dd h:mm a"
+            }}
+          </td>
+          <td>
+            {{ monitoringSchedule.agenda.endDate | date: "yyyy-MM-dd h:mm a" }}
+          </td>
+          <td>
+            <div class="flex gap-2">
+              <p-button
+                role="link"
+                icon="pi pi-info"
+                pTooltip="Ver detalle monitoria"
+                tooltipPosition="bottom"
+                [routerLink]="[
+                  '/monitoring',
+                  monitoringSchedule.agenda.monitoring.id
+                ]"
+                [rounded]="true"
+                [outlined]="true"
+              ></p-button>
+              <p-button
+                pTooltip="Cancelar monitoria"
+                tooltipPosition="bottom"
+                icon="pi pi-ban"
+                [rounded]="true"
+                [outlined]="true"
+                (onClick)="openUnscheduleMonitoringModal(monitoringSchedule)"
+              ></p-button>
+              <p-button
+                pTooltip="Ir a reunión"
+                tooltipPosition="bottom"
+                icon="pi pi-external-link"
+                [rounded]="true"
+                [outlined]="true"
+              ></p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
 </div>
+
+<p-confirmDialog [dismissableMask]="true">
+  <ng-template pTemplate="message" let-message>
+    <div>
+      <p class="mb-3">{{ message.message }}</p>
+      @if (selectedMonitoringSchedule) {
+        <div class="flex flex-column gap-1">
+          <p>
+            <span class="font-bold">Monitor </span>
+            <span>
+              {{
+                selectedMonitoringSchedule.agenda.monitoring.createdBy.profile
+                  .firstName
+              }}
+              {{
+                selectedMonitoringSchedule.agenda.monitoring.createdBy.profile
+                  .lastName
+              }}
+            </span>
+          </p>
+          <p>
+            <span class="font-bold">Asignatura </span>
+            <span>{{
+              selectedMonitoringSchedule.agenda.monitoring.subject.name
+            }}</span>
+          </p>
+          <p>
+            <span class="font-bold">Inicia </span>
+            <span>
+              {{
+                selectedMonitoringSchedule.agenda.startDate
+                  | date: "yyyy-MM-dd h:mm a"
+              }}
+            </span>
+          </p>
+          <p>
+            <span class="font-bold">Finaliza </span>
+            <span>
+              {{
+                selectedMonitoringSchedule.agenda.endDate
+                  | date: "yyyy-MM-dd h:mm a"
+              }}
+            </span>
+          </p>
+        </div>
+      }
+    </div>
+  </ng-template>
+</p-confirmDialog>

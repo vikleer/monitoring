@@ -49,6 +49,13 @@ export const routes: Routes = [
             "./pages/my-monitoring-page/my-monitoring-page.component"
           ).then((m) => m.MyMonitoringPageComponent),
       },
+      {
+        path: "my-agenda",
+        loadComponent: () =>
+          import(
+            "./pages/my-monitoring-agenda/my-monitoring-agenda.component"
+          ).then((m) => m.MyMonitoringAgendaComponent),
+      },
     ],
   },
   {

@@ -1,19 +1,51 @@
+<p-toast></p-toast>
+
 <main class="page-layout">
   <app-navbar></app-navbar>
-  <div class="flex-1 text-gray-600 container border-round-md bg-white my-6 p-3">
+  <div
+    class="flex-1 text-gray-600 container lg:border-round-md bg-white my-6 p-3"
+  >
     <h1>{{ monitoring.title }}</h1>
     <h2 class="mb-3">{{ monitoring.subject.name }}</h2>
-    <p class="mb-3">
-      <span class="font-bold">Monitor </span>
-      <span>
-        {{ monitoring.createdBy.profile.firstName }}
-        {{ monitoring.createdBy.profile.lastName }}
-      </span>
-    </p>
     <p class="mb-3">{{ monitoring.description }}</p>
+    <div class="flex flex-column gap-2 mb-3">
+      <h3 class="font-bold">Información sobre el monitor</h3>
+      <p>
+        <span class="font-bold">Nombre</span>
+        <span>
+          {{ monitoring.createdBy.profile.firstName }}
+          {{ monitoring.createdBy.profile.lastName }}
+        </span>
+      </p>
+      <p>
+        <span class="font-bold">Correo electrónico</span>
+        <span>
+          {{ monitoring.createdBy.email }}
+        </span>
+      </p>
+      <p>
+        <span class="font-bold">Edad</span>
+        <span>
+          {{ monitoring.createdBy.profile.age }}
+        </span>
+      </p>
+      <p>
+        <span class="font-bold">Género</span>
+        <span>
+          {{ monitoring.createdBy.profile.gender }}
+        </span>
+      </p>
+      <p>
+        <span class="font-bold">Sobre mí</span>
+        <span>
+          {{ monitoring.createdBy.profile.overview }}
+        </span>
+      </p>
+    </div>
     <p-button
       icon="pi pi-calendar"
       label="Agendar"
+      size="small"
       (click)="openAgendasCalendarModal()"
     ></p-button>
   </div>
@@ -28,16 +60,32 @@
   [resizable]="false"
   [dismissableMask]="true"
 >
-  <div class="flex justify-content-center">
+  <div>
+    <div class="flex align-items-center gap-2 mb-3">
+      <div
+        [ngStyle]="{ width: '12px', height: '12px' }"
+        class="bg-primary border-circle"
+      ></div>
+      <p>Fechas disponibles</p>
+    </div>
     <p-calendar
       class="monitoring-agendas-calendar max-w-full"
       [inline]="true"
-      [showWeek]="true"
       [disabledDates]="disabledDates"
       [disabled]="isAgendasCalendarDisabled"
       (onMonthChange)="setCurrentMonth($event)"
       (onSelect)="openAgendaDetailModal($event)"
     >
+      <ng-template pTemplate="date" let-date>
+        <span
+          [ngClass]="{
+            'text-primary font-bold':
+              isAvailableDate(date) && !isAgendasCalendarDisabled
+          }"
+        >
+          {{ date.day }}
+        </span>
+      </ng-template>
     </p-calendar>
   </div>
 </p-dialog>
@@ -74,7 +122,7 @@
             </span>
           </p>
           <p>
-            <span class="font-bold">Plazas agendas </span>
+            <span class="font-bold">Inscripciones </span>
             <span>
               {{ selectedMonitoringAgenda.placesTaken }}/{{
                 monitoring.maxAvailablePlaces
@@ -86,5 +134,3 @@
     </div>
   </ng-template>
 </p-confirmDialog>
-
-<p-toast></p-toast>

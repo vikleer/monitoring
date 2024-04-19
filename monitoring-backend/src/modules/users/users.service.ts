@@ -58,7 +58,7 @@ export class UsersService {
       },
     });
 
-    if (!user) throw new BadRequestException("User not found");
+    if (!user) throw new BadRequestException("Usuario no encontrado.");
 
     // Check if the requesting user has the permission to read the user
     const requestingUser = this.request.user!.entity;
@@ -100,7 +100,7 @@ export class UsersService {
       },
     });
 
-    if (!userToUpdate) throw new NotFoundException("User not found");
+    if (!userToUpdate) throw new NotFoundException("Usuario no encontrado.");
 
     // Check if the requesting user has the permission to update the user
     const requestingUser = this.request.user!.entity;
@@ -121,7 +121,7 @@ export class UsersService {
 
       // If the email is already in use by another user, throw an error
       if (userWithSameEmail && userWithSameEmail.id !== userToUpdate.id) {
-        throw new ConflictException("Email already in use");
+        throw new ConflictException("El correo ya está en uso.");
       }
     }
 
@@ -139,7 +139,7 @@ export class UsersService {
         where: { id: updateUserDto.profile.degreeId },
       });
 
-      if (!degree) throw new NotFoundException("Degree not found");
+      if (!degree) throw new NotFoundException("Carrera no encontrada");
 
       userToSave.profile.degree = degree;
     }
@@ -167,7 +167,7 @@ export class UsersService {
       relations: { sessions: true, profile: true },
     });
 
-    if (!userToRemove) throw new BadRequestException("User not found");
+    if (!userToRemove) throw new BadRequestException("Usuario no encontrado.");
 
     // Check if the requesting user has the permission to remove the user
     const requestingUser = this.request.user!.entity;

@@ -5,7 +5,7 @@ import { RouterModule } from "@angular/router";
 import { FooterComponent } from "@src/app/modules/common/components/footer/footer.component";
 import { NavbarComponent } from "@src/app/modules/common/components/navbar/navbar.component";
 import { Monitoring } from "@src/app/modules/monitoring/entities/monitoring";
-import { MonitoringService } from "@src/app/modules/monitoring/services/monitoring-service/monitoring.service";
+import { MonitoringService } from "@src/app/modules/monitoring/services/monitoring/monitoring.service";
 import { ButtonModule } from "primeng/button";
 import { CardModule } from "primeng/card";
 import { InputTextModule } from "primeng/inputtext";

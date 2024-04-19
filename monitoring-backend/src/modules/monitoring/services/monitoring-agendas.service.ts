@@ -11,7 +11,9 @@ import {
   createDateFromMonthDayTime,
   createDateFromWeekDayTime,
 } from "@src/utils/create-date";
+import { parseISO } from "date-fns";
 import { In, Repository } from "typeorm";
+import { FindCreatedMonitoringAgendasDto } from "../dto/monitoring-agendas/find-created-monitoring.dto";
 
 @Injectable()
 export class MonitoringAgendasService {
@@ -101,6 +103,27 @@ export class MonitoringAgendasService {
     return monitoringAgendas;
   }
 
+  public async findCreated(
+    findCreatedMonitoringAgendasDto: FindCreatedMonitoringAgendasDto,
+  ): Promise<MonitoringAgenda[]> {
+    const queryBuilder = this.monitoringAgendasRepository
+      .createQueryBuilder("monitoringAgenda")
+      .innerJoinAndSelect("monitoringAgenda.monitoring", "monitoring")
+      .innerJoinAndSelect("monitoring.subject", "subject")
+      .innerJoinAndSelect("monitoring.createdBy", "createdBy")
+      .innerJoinAndSelect("monitoring.availabilities", "availabilities");
+
+    if (findCreatedMonitoringAgendasDto.createdById) {
+      queryBuilder.where("createdBy.id = :createdById", {
+        createdById: findCreatedMonitoringAgendasDto.createdById,
+      });
+    }
+
+    const monitoringAgendas = await queryBuilder.getMany();
+
+    return monitoringAgendas;
+  }
+
   /**
    * Calculates the monitoring agendas based on the provided parameters.
    *
@@ -130,8 +153,8 @@ export class MonitoringAgendasService {
       if (availability.recurrence.type === "weekly") {
         availability.recurrence.weekDays.forEach((weekDay) => {
           const agendas = createDateFromWeekDayTime(weekDay, {
-            start: new Date(findAllMonitoringAgendasDto.startDate),
-            end: new Date(findAllMonitoringAgendasDto.endDate),
+            start: parseISO(findAllMonitoringAgendasDto.startDate),
+            end: parseISO(findAllMonitoringAgendasDto.endDate),
           });
 
           monitoringAgendasDateRanges.push(...agendas);

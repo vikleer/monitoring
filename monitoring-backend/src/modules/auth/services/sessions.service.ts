@@ -88,7 +88,7 @@ export class SessionsService {
       ForbiddenError.from(userAbility).throwUnlessCan(Action.READ, session);
     }
 
-    if (!session) throw new BadRequestException("Session not found");
+    if (!session) throw new BadRequestException("Sesión no encontrada.");
 
     return session;
   }
@@ -107,7 +107,7 @@ export class SessionsService {
       relations: { user: true },
     });
 
-    if (!sessionToRefresh) throw new NotFoundException("Session not found");
+    if (!sessionToRefresh) throw new NotFoundException("Sesión no encontrada.");
 
     // Check if the requesting user has the permission to refresh the session
     const requestingUser = this.request.user!.entity;
@@ -157,7 +157,7 @@ export class SessionsService {
         relations: { user: true },
       });
 
-      if (!session) throw new BadRequestException("Session not found");
+      if (!session) throw new BadRequestException("Sesión no encontrada.");
 
       // Check if the requesting user has the permission to delete the session
       const requestingUser = this.request.user!.entity;
@@ -192,7 +192,7 @@ export class SessionsService {
       relations: { user: true },
     });
 
-    if (!session) throw new BadRequestException("Session not found");
+    if (!session) throw new BadRequestException("Sesión no encontrada.");
 
     // Check if the requesting user has the permission to delete the session
     const requestingUser = this.request.user!.entity;

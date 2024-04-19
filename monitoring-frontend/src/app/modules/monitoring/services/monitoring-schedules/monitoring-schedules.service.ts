@@ -29,4 +29,10 @@ export class MonitoringSchedulesService {
 
     return this.httpClient.get<MonitoringSchedule[]>(endpoint, { params });
   }
+
+  public unschedule(monitoringScheduleId: string): Observable<void> {
+    const endpoint = `${environment.API_URL}/monitoring-schedules/${monitoringScheduleId}`;
+
+    return this.httpClient.delete<void>(endpoint);
+  }
 }

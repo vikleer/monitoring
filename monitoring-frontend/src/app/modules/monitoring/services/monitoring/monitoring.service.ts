@@ -5,10 +5,19 @@ import { Monitoring } from "@src/app/modules/monitoring/entities/monitoring";
 import { FindAllMonitoringDto } from "@src/app/modules/monitoring/dto/find-all-monitoring.dto";
 import { environment } from "@src/environments/environment";
 import { Observable } from "rxjs";
+import { CreateMonitoringDto } from "@src/app/modules/monitoring/dto/create-monitoring.dto";
 
 @Injectable({ providedIn: "root", useClass: MonitoringService })
 export class MonitoringService {
   public httpClient = inject(HttpClient);
+
+  public create(
+    createMonitoringDto: CreateMonitoringDto,
+  ): Observable<Monitoring> {
+    const endpoint = `${environment.API_URL}/monitoring`;
+
+    return this.httpClient.post<Monitoring>(endpoint, createMonitoringDto);
+  }
 
   public findAll(
     findAllMonitoringDto?: FindAllMonitoringDto,

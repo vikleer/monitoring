@@ -1,5 +1,8 @@
-import { getMonth, startOfMonth } from "date-fns";
+import { getMonth, getYear, startOfMonth } from "date-fns";
 
-export function getStartOfMonth(month: number = getMonth(new Date())): Date {
-  return startOfMonth(new Date(new Date().getFullYear(), month, 1));
+export function getStartOfMonth(
+  month: number = getMonth(new Date()),
+  year: number = getYear(new Date()),
+): Date {
+  return startOfMonth(new Date(year, month, 1));
 }

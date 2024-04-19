@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { FooterComponent } from "@src/app/modules/common/components/footer/footer.component";
 import { NavbarComponent } from "@src/app/modules/common/components/navbar/navbar.component";
@@ -19,7 +19,7 @@ import { TabMenuModule } from "primeng/tabmenu";
   templateUrl: "./monitors-page.component.html",
   styleUrl: "./monitors-page.component.css",
 })
-export class MonitorsPageComponent {
+export class MonitorsPageComponent implements OnInit {
   public items: MenuItem[] | undefined;
 
   public activeItem: MenuItem | undefined;
@@ -30,6 +30,11 @@ export class MonitorsPageComponent {
         label: "Mis monitorias",
         icon: "pi pi-fw pi-calendar",
         routerLink: "/monitoring/monitors/my-monitoring",
+      },
+      {
+        label: "Mi agenda",
+        icon: "pi pi-fw pi-calendar",
+        routerLink: "/monitoring/monitors/my-agenda",
       },
     ];
 

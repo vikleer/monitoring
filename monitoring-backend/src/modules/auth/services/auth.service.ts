@@ -55,13 +55,18 @@ export class AuthService {
       where: { email: signInDto.email },
     });
 
-    if (!user) throw new BadRequestException("Email or password are incorrect");
+    if (!user)
+      throw new BadRequestException(
+        "El correo o la contraseña son incorrectos.",
+      );
 
     // Check if password matches
     const passwordMatches = await verify(user.password, signInDto.password);
 
     if (!passwordMatches) {
-      throw new BadRequestException("Email or password are incorrect");
+      throw new BadRequestException(
+        "El correo o la contraseña son incorrectos.",
+      );
     }
 
     // Generate auth tokens

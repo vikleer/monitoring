@@ -5,6 +5,7 @@ import { FindAllMonitoringAgendaDto } from "@src/app/modules/monitoring/dto/find
 import { environment } from "@src/environments/environment";
 import { Observable } from "rxjs";
 import { setUpQueryParams } from "@src/app/modules/common/utils/set-up-query-params";
+import { FindCreatedMonitoringAgendas } from "../../dto/find-created-agendas.dto";
 
 @Injectable({ providedIn: "root" })
 export class MonitoringAgendasService {
@@ -16,6 +17,16 @@ export class MonitoringAgendasService {
     const endpoint = `${environment.API_URL}/monitoring-agendas`;
 
     const params = setUpQueryParams(findAllMonitoringAgenda);
+
+    return this.httpClient.get<MonitoringAgenda[]>(endpoint, { params });
+  }
+
+  public findCreated(
+    findCreatedMonitoringAgendas: FindCreatedMonitoringAgendas,
+  ): Observable<MonitoringAgenda[]> {
+    const endpoint = `${environment.API_URL}/monitoring-agendas/created`;
+
+    const params = setUpQueryParams(findCreatedMonitoringAgendas);
 
     return this.httpClient.get<MonitoringAgenda[]>(endpoint, { params });
   }

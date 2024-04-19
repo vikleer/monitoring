@@ -31,7 +31,7 @@ export class DegreeSubjectsService {
       where: { id: subjectId },
     });
 
-    if (!subject) throw new NotFoundException("Subject not found");
+    if (!subject) throw new NotFoundException("Asignatura no encontrada.");
 
     return subject;
   }

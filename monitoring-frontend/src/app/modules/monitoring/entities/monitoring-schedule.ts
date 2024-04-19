@@ -27,14 +27,7 @@ export interface Monitoring {
   description: string;
   maxAvailablePlaces: number;
   subject: Subject;
-}
-
-export interface Subject {
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: null;
-  id: string;
-  name: string;
+  createdBy: User;
 }
 
 export interface User {
@@ -44,4 +37,25 @@ export interface User {
   id: string;
   email: string;
   password: string;
+  profile: Profile;
+}
+
+export interface Profile {
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: null;
+  id: string;
+  firstName: string;
+  lastName: string;
+  age: number;
+  gender: string;
+  overview: string;
+}
+
+export interface Subject {
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: null;
+  id: string;
+  name: string;
 }

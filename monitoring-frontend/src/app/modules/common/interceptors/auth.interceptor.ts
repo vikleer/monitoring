@@ -1,9 +1,9 @@
 import type { HttpInterceptorFn } from "@angular/common/http";
+import { environment } from "@src/environments/environment";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // TODO: Get the token from storage
-  const ACCESS_TOKEN =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiZjdmMTkzM2YtMWUyOC00MDMxLWIxYTUtZjUxYjFlODViZjM2In0sImlhdCI6MTcxMzI5NzI0NSwiZXhwIjoxNzEzOTAyMDQ1fQ.33v8DhFRbGFFvVwtgbxnnSSjuEQDJx7DuQfwP2CyjTg";
+  const ACCESS_TOKEN = environment.USER_ACCESS_TOKEN;
 
   if (ACCESS_TOKEN) {
     req = req.clone({

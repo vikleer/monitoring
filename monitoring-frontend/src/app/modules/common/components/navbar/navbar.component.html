@@ -7,18 +7,57 @@
         class="h-3rem"
       />
     </a>
-    <div class="flex gap-3 ml-auto mr-6">
-      <a class="no-underline" routerLink="/">Inicio</a>
-      <a class="no-underline" routerLink="/monitoring/students">Estudiantes</a>
-      <a class="no-underline" routerLink="/monitoring/monitors">Monitores</a>
+    <div class="hidden gap-6 ml-auto md:flex align-items-center">
+      <div class="flex gap-3">
+        @for (link of links; track link.path) {
+          <a
+            class="no-underline text-gray-600 font-semibold"
+            routerLinkActive="text-primary"
+            [routerLink]="link.path"
+            [routerLinkActiveOptions]="{ exact: link.exact }"
+          >
+            {{ link.label | uppercase }}
+          </a>
+        }
+      </div>
+      <p-button
+        icon="pi pi-user"
+        [rounded]="true"
+        [outlined]="true"
+        pTooltip="Perfil"
+        tooltipPosition="bottom"
+      ></p-button>
     </div>
     <p-button
-      icon="pi pi-user"
+      icon="pi pi-bars"
       [rounded]="true"
-      severity="info"
       [outlined]="true"
-      pTooltip="Perfil"
-      tooltipPosition="bottom"
+      class="md:hidden"
+      (onClick)="openSidebar()"
     ></p-button>
   </div>
 </header>
+
+<p-sidebar [(visible)]="isSidebarOpen">
+  <ng-template pTemplate="header">
+    <a routerLink="/">
+      <img
+        src="/assets/images/logo.png"
+        alt="Logo de la Universidad Católica de Pereira"
+        class="h-3rem"
+      />
+    </a>
+  </ng-template>
+  <div class="flex flex-column gap-3">
+    @for (link of links; track link.path) {
+      <a
+        class="no-underline text-gray-600 font-semibold"
+        routerLinkActive="text-primary"
+        [routerLink]="link.path"
+        [routerLinkActiveOptions]="{ exact: link.exact }"
+      >
+        {{ link.label | uppercase }}
+      </a>
+    }
+  </div>
+</p-sidebar>

@@ -1,23 +1,184 @@
-<p-button icon="pi pi-plus" label="Crear"></p-button>
+<p-toast></p-toast>
+
+<p class="mb-3">Aquí puede ver sus monitorias</p>
+
+<p-button
+  icon="pi pi-plus"
+  label="Crear"
+  size="small"
+  (onClick)="openCreateMonitoringModal()"
+></p-button>
+
 <div class="mt-3">
-  <p-table>
-    <ng-template pTemplate="header">
-      <tr>
-        <th id="title">Título</th>
-        <th id="subject">Asignatura</th>
-        <th id="start">Inicia</th>
-        <th id="end">Finaliza</th>
-        <th id="actions">Acciones</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-monitoring>
-      <tr>
-        <td>{{ monitoring.title }}</td>
-        <td>{{ monitoring.subject.name }}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </ng-template>
-  </p-table>
+  @if (monitoring.length === 0) {
+    <p class="text-gray-600">No hay monitorias creadas</p>
+  }
+
+  @if (monitoring.length > 0) {
+    <p-table [value]="monitoring">
+      <ng-template pTemplate="header">
+        <tr>
+          <th id="title">Título</th>
+          <th id="subject">Asignatura</th>
+          <th id="recurrence">Recurrencia</th>
+          <th id="actions">Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-monitoring>
+        <tr class="white-space-nowrap">
+          <td>{{ monitoring.title }}</td>
+          <td>{{ monitoring.subject.name }}</td>
+          <td>
+            {{
+              monitoring.availabilities[0].recurrence.weekDays[0].day
+                | appWeekDay
+            }}
+            de
+            {{
+              monitoring.availabilities[0].recurrence.weekDays[0].time.start
+                | appMilitaryToNormalTime
+            }}
+            a
+            {{
+              monitoring.availabilities[0].recurrence.weekDays[0].time.end
+                | appMilitaryToNormalTime
+            }}
+          </td>
+          <td>
+            <div class="flex gap-2">
+              <p-button
+                role="link"
+                icon="pi pi-info"
+                pTooltip="Ver detalle monitoria"
+                tooltipPosition="bottom"
+                [routerLink]="['/monitoring', monitoring.id]"
+                [rounded]="true"
+                [outlined]="true"
+              ></p-button>
+              <p-button
+                pTooltip="Cancelar monitoria"
+                tooltipPosition="bottom"
+                icon="pi pi-ban"
+                [rounded]="true"
+                [outlined]="true"
+              ></p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
 </div>
+
+<p-dialog
+  class="dialog"
+  header="Crear monitoria"
+  [(visible)]="isCreateMonitoringModalOpen"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form
+    class="flex flex-column gap-3 overflow-hidden"
+    [formGroup]="createMonitoringForm"
+    (ngSubmit)="createMonitoring()"
+  >
+    <div class="flex flex-column gap-2">
+      <label for="title">Título</label>
+      <input
+        pInputText
+        id="title"
+        aria-describedby="title"
+        formControlName="title"
+      />
+    </div>
+    <div class="flex flex-column gap-2">
+      <label for="description">Descripción</label>
+      <textarea
+        id="description"
+        rows="5"
+        cols="30"
+        pInputTextarea
+        formControlName="description"
+      ></textarea>
+    </div>
+    <div class="flex flex-column gap-2 w-full">
+      <label for="maxAvailablePlaces">Plazas máximas disponibles</label>
+      <p-inputNumber
+        id="maxAvailablePlaces"
+        inputId="integeronly"
+        styleClass="w-full"
+        formControlName="maxAvailablePlaces"
+      ></p-inputNumber>
+    </div>
+    <div class="flex flex-column gap-2 w-full">
+      <label for="degreeSubject">Asignatura</label>
+      <p-dropdown
+        id="degreeSubject"
+        appendTo="body"
+        optionLabel="name"
+        placeholder="Selecciona una asignatura"
+        styleClass="w-full"
+        formControlName="subject"
+        [showClear]="true"
+        [options]="subjects"
+      ></p-dropdown>
+    </div>
+    <div class="flex flex-column gap-2 w-full">
+      <label for="weekDay">Se repite el</label>
+      <p-dropdown
+        id="weekDay"
+        appendTo="body"
+        optionLabel="name"
+        placeholder="Selecciona un día de la semana"
+        styleClass="w-full"
+        formControlName="weekDay"
+        [showClear]="true"
+        [options]="weekDays"
+      ></p-dropdown>
+    </div>
+    <div class="flex gap-2">
+      <div class="flex flex-column flex-1 gap-2">
+        <label for="startTime">Inicia</label>
+        <p-dropdown
+          id="startTime"
+          appendTo="body"
+          optionLabel="normal"
+          placeholder="Selecciona la hora de inicio"
+          formControlName="startTime"
+          [showClear]="true"
+          [options]="times"
+        ></p-dropdown>
+      </div>
+      <div class="flex flex-column flex-1 gap-2">
+        <label for="endTime">Finaliza</label>
+        <p-dropdown
+          id="endTime"
+          appendTo="body"
+          optionLabel="normal"
+          placeholder="Selecciona la hora de fin"
+          formControlName="endTime"
+          [showClear]="true"
+          [options]="times"
+        ></p-dropdown>
+      </div>
+    </div>
+    <div class="flex gap-2 mt-3 align-self-end">
+      <p-button
+        icon="pi pi-times"
+        label="Cancelar"
+        size="small"
+        (onClick)="closeCreateMonitoringModal()"
+      ></p-button>
+      <p-button
+        type="submit"
+        icon="pi pi-plus"
+        label="Confirmar"
+        size="small"
+        [disabled]="createMonitoringForm.invalid"
+        [outlined]="true"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>

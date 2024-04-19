@@ -64,7 +64,17 @@ export class MonitoringSchedulesService {
   ): Promise<MonitoringSchedule[]> {
     const monitoringSchedules = await this.monitoringSchedulesRepository.find({
       where: { user: { id: findAllMonitoringSchedulesDto.userId } },
-      relations: { agenda: { monitoring: { subject: true } }, user: true },
+      relations: {
+        agenda: {
+          monitoring: {
+            subject: true,
+            createdBy: {
+              profile: true,
+            },
+          },
+        },
+        user: true,
+      },
     });
 
     const requestingUser = this.request.user!.entity;
@@ -120,7 +130,7 @@ export class MonitoringSchedulesService {
 
     // Check if monitoring agenda is valid
     const isValidAgenda = await this.monitoringAgendaService.isValidAgenda({
-      monitoringId: scheduleMonitoringDto.monitoringId,
+      monitoringId: monitoringToSchedule.id,
       startDate: scheduleMonitoringDto.startDate,
       endDate: scheduleMonitoringDto.endDate,
     });
@@ -132,6 +142,7 @@ export class MonitoringSchedulesService {
     // Check if monitoring agenda exists
     let monitoringAgenda = await this.monitoringAgendasRepository.findOne({
       where: {
+        monitoring: { id: monitoringToSchedule.id },
         startDate: new Date(scheduleMonitoringDto.startDate),
         endDate: new Date(scheduleMonitoringDto.endDate),
       },
@@ -144,7 +155,7 @@ export class MonitoringSchedulesService {
     // If monitoring agenda does not exist, create it
     if (!monitoringAgenda) {
       monitoringAgenda = await this.monitoringAgendasRepository.save({
-        monitoring: { id: scheduleMonitoringDto.monitoringId },
+        monitoring: monitoringToSchedule,
         startDate: new Date(scheduleMonitoringDto.startDate),
         endDate: new Date(scheduleMonitoringDto.endDate),
       });
@@ -163,14 +174,16 @@ export class MonitoringSchedulesService {
     // If user already scheduled this monitoring agenda, throw an error
     if (monitoringSchedule) {
       throw new ConflictException(
-        "Ya ha agendado esta u otra monitoria para esta fecha.",
+        "Ya ha agendado la monitoria para esta fecha.",
       );
     }
 
     if (
       monitoringAgenda.placesTaken >= monitoringToSchedule.maxAvailablePlaces
     ) {
-      throw new ConflictException("La agenda de la monitoria está completa.");
+      throw new ConflictException(
+        "Las inscripciones para esta fecha están completas.",
+      );
     }
 
     // Update monitoring agenda places taken
