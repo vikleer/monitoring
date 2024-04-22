@@ -3,7 +3,7 @@ import { DegreeSubject } from "@src/app/modules/monitoring/entities/degree-subje
 import { Time } from "@src/app/modules/monitoring/types/times.type";
 import { WeekDay } from "@src/app/modules/monitoring/types/weekdays.type";
 
-export type CreateMonitoringGroup = {
+export type MonitoringFormGroup = {
   title: FormControl<string>;
   description: FormControl<string>;
   maxAvailablePlaces: FormControl<number>;

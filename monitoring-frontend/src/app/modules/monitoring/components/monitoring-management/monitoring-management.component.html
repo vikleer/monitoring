@@ -1,0 +1,110 @@
+<form
+  class="form flex flex-column gap-3 overflow-hidden"
+  [formGroup]="monitoringForm"
+  (ngSubmit)="submitForm()"
+>
+  <div class="flex flex-column gap-2">
+    <label for="title">Título</label>
+    <input
+      pInputText
+      id="title"
+      aria-describedby="title"
+      formControlName="title"
+    />
+  </div>
+  <div class="flex flex-column gap-2">
+    <label for="description">Descripción</label>
+    <textarea
+      id="description"
+      rows="5"
+      cols="30"
+      pInputTextarea
+      formControlName="description"
+    ></textarea>
+  </div>
+  @if (mode === "edit") {
+    <p>
+      No se pueden modificar detalles de la monitoria. Por favor, cree una nueva
+      si es necesario para no afectar a los posibles agendados.
+    </p>
+  }
+  @if (mode === "create") {
+    <div class="flex flex-column gap-2 w-full">
+      <label for="maxAvailablePlaces">Plazas máximas disponibles</label>
+      <p-inputNumber
+        id="maxAvailablePlaces"
+        inputId="integeronly"
+        styleClass="w-full"
+        formControlName="maxAvailablePlaces"
+      ></p-inputNumber>
+    </div>
+    <div class="flex flex-column gap-2 w-full">
+      <label for="degreeSubject">Asignatura</label>
+      <p-dropdown
+        id="degreeSubject"
+        appendTo="body"
+        optionLabel="name"
+        placeholder="Selecciona una asignatura"
+        styleClass="w-full"
+        formControlName="subject"
+        [showClear]="true"
+        [options]="subjects"
+      ></p-dropdown>
+    </div>
+    <div class="flex flex-column gap-2 w-full">
+      <label for="weekDay">Se repite el</label>
+      <p-dropdown
+        id="weekDay"
+        appendTo="body"
+        optionLabel="name"
+        placeholder="Selecciona un día de la semana"
+        styleClass="w-full"
+        formControlName="weekDay"
+        [showClear]="true"
+        [options]="weekDays"
+      ></p-dropdown>
+    </div>
+    <div class="flex gap-2">
+      <div class="flex flex-column flex-1 gap-2">
+        <label for="startTime">Inicia</label>
+        <p-dropdown
+          id="startTime"
+          appendTo="body"
+          optionLabel="normal"
+          placeholder="Selecciona la hora de inicio"
+          formControlName="startTime"
+          [showClear]="true"
+          [options]="times"
+        ></p-dropdown>
+      </div>
+      <div class="flex flex-column flex-1 gap-2">
+        <label for="endTime">Finaliza</label>
+        <p-dropdown
+          id="endTime"
+          appendTo="body"
+          optionLabel="normal"
+          placeholder="Selecciona la hora de fin"
+          formControlName="endTime"
+          [showClear]="true"
+          [options]="times"
+        ></p-dropdown>
+      </div>
+    </div>
+  }
+  <div class="flex gap-2 mt-3 align-self-end">
+    <p-button
+      icon="pi pi-times"
+      label="Cancelar"
+      size="small"
+      (onClick)="cancelForm()"
+    ></p-button>
+    <p-button
+      type="submit"
+      icon="pi pi-plus"
+      label="Confirmar"
+      size="small"
+      [disabled]="monitoringForm.invalid"
+      [outlined]="true"
+    ></p-button>
+  </div>
+</form>

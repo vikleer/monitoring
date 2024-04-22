@@ -58,7 +58,7 @@ export class MyAgendaPageComponent implements OnInit {
 
     this.confirmationService.confirm({
       header: "Cancelar monitoria",
-      message: "Por favor, confirme para seguir adelante",
+      message: "Por favor, confirme para cancelar",
       acceptIcon: "pi pi-check mr-2",
       rejectIcon: "pi pi-times mr-2",
       rejectButtonStyleClass: "p-button-sm",

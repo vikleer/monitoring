@@ -9,7 +9,9 @@ import { DegreeSubject } from "@src/modules/degrees/entities/degree-subject.enti
 import { CreateMonitoringDto } from "@src/modules/monitoring/dto/monitoring/create-monitoring.dto";
 import { FindAllMonitoringDto } from "@src/modules/monitoring/dto/monitoring/find-all-monitoring.dto";
 import { UpdateMonitoringDto } from "@src/modules/monitoring/dto/monitoring/update-monitoring.dto";
+import { MonitoringAgenda } from "@src/modules/monitoring/entities/monitoring-agenda.entity";
 import { MonitoringAvailability } from "@src/modules/monitoring/entities/monitoring-availability.entity";
+import { MonitoringSchedule } from "@src/modules/monitoring/entities/monitoring-schedule.entity";
 import { Monitoring } from "@src/modules/monitoring/entities/monitoring.entity";
 import { Request } from "express";
 import { Repository } from "typeorm";
@@ -25,6 +27,10 @@ export class MonitoringService {
     private monitoringAvailabilitiesRepository: Repository<MonitoringAvailability>,
     @InjectRepository(DegreeSubject)
     private degreeSubjectsRepository: Repository<DegreeSubject>,
+    @InjectRepository(MonitoringSchedule)
+    private monitoringSchedulesRepository: Repository<MonitoringSchedule>,
+    @InjectRepository(MonitoringAgenda)
+    private monitoringAgendasRepository: Repository<MonitoringAgenda>,
     private abilityService: AbilityService,
   ) {}
 
@@ -98,13 +104,14 @@ export class MonitoringService {
     // Inner join with createdBy and subject
     queryBuilder
       .innerJoinAndSelect("monitoring.createdBy", "createdBy")
+      .innerJoinAndSelect("createdBy.profile", "profile")
       .innerJoinAndSelect("monitoring.subject", "subject")
       .innerJoinAndSelect("monitoring.availabilities", "availabilities");
 
     // Filter by keyword, title, description, createdBy, and subject
     if (findAllMonitoringDto.keyword) {
       queryBuilder.andWhere(
-        "monitoring.title ILIKE :keyword OR monitoring.description ILIKE :keyword",
+        "monitoring.title ILIKE :keyword OR monitoring.description ILIKE :keyword OR subject.name ILIKE :keyword OR profile.firstName ILIKE :keyword OR profile.lastName ILIKE :keyword",
         { keyword: `%${findAllMonitoringDto.keyword}%` },
       );
     }
@@ -251,6 +258,21 @@ export class MonitoringService {
       Action.DELETE,
       monitoringToRemove,
     );
+
+    // Find all schedules related to the monitoring
+    const schedulesToRemove = await this.monitoringSchedulesRepository.find({
+      where: { agenda: { monitoring: { id: monitoringToRemove.id } } },
+    });
+
+    const agendasToRemove = await this.monitoringAgendasRepository.find({
+      where: { monitoring: { id: monitoringToRemove.id } },
+    });
+
+    // Soft remove the schedules
+    await this.monitoringSchedulesRepository.softRemove(schedulesToRemove);
+
+    // Soft remove the agendas
+    await this.monitoringAgendasRepository.softRemove(agendasToRemove);
 
     // Soft remove the monitoring
     await this.monitoringRepository.softRemove(monitoringToRemove);

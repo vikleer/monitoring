@@ -1,25 +1,18 @@
 import { CommonModule } from "@angular/common";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, inject, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MilitaryToNormalTimePipe } from "@src/app/modules/common/pipes/military-to-normal-time.pipe";
 import { WeekDayPipe } from "@src/app/modules/common/pipes/week-day.pipe";
-import { TIMES } from "@src/app/modules/monitoring/constants/times";
-import { WEEKDAYS } from "@src/app/modules/monitoring/constants/weekdays";
+import { MonitoringManagementComponent } from "@src/app/modules/monitoring/components/monitoring-management/monitoring-management.component";
 import { CreateMonitoringDto } from "@src/app/modules/monitoring/dto/create-monitoring.dto";
-import { DegreeSubject } from "@src/app/modules/monitoring/entities/degree-subject";
+import { UpdateMonitoringDto } from "@src/app/modules/monitoring/dto/update-monitoring.dto";
 import { Monitoring } from "@src/app/modules/monitoring/entities/monitoring";
-import { DegreeSubjectsService } from "@src/app/modules/monitoring/services/degree-subjects/degree-subjects.service";
 import { MonitoringService } from "@src/app/modules/monitoring/services/monitoring/monitoring.service";
-import { CreateMonitoringGroup } from "@src/app/modules/monitoring/types/create-monitoring-form.type";
+import { MonitoringSubmitted } from "@src/app/modules/monitoring/types/monitoring-submitted.type";
 import { environment } from "@src/environments/environment";
-import { MessageService } from "primeng/api";
+import { ConfirmationService, MessageService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { DialogModule } from "primeng/dialog";
@@ -50,59 +43,27 @@ import { TooltipModule } from "primeng/tooltip";
     ToastModule,
     MilitaryToNormalTimePipe,
     WeekDayPipe,
+    MonitoringManagementComponent,
   ],
-  providers: [MessageService],
+  providers: [ConfirmationService, MessageService],
   templateUrl: "./my-monitoring-page.component.html",
   styleUrl: "./my-monitoring-page.component.css",
 })
 export class MyMonitoringPageComponent implements OnInit {
-  public degreeSubjectsService = inject(DegreeSubjectsService);
   public monitoringService = inject(MonitoringService);
-  public formBuilder = inject(FormBuilder);
+  public confirmationService = inject(ConfirmationService);
   public messageService = inject(MessageService);
 
   public monitoring: Monitoring[] = [];
-  public subjects: DegreeSubject[] = [];
-  public weekDays = WEEKDAYS;
-  public times = TIMES;
 
   public isCreateMonitoringModalOpen = false;
+  public isEditMonitoringModalOpen = false;
 
-  public createMonitoringForm!: FormGroup<CreateMonitoringGroup>;
+  public monitoringToEdit: Monitoring | null = null;
 
-  public constructor() {
-    this.createMonitoringForm = this.formBuilder.group<CreateMonitoringGroup>({
-      title: this.formBuilder.control("", {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      description: this.formBuilder.control("", {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      maxAvailablePlaces: this.formBuilder.control(3, {
-        nonNullable: true,
-        validators: [Validators.required, Validators.min(1), Validators.max(3)],
-      }),
-      subject: this.formBuilder.control(null, {
-        validators: [Validators.required],
-      }),
-      weekDay: this.formBuilder.control(null, {
-        validators: [Validators.required],
-      }),
-      startTime: this.formBuilder.control(TIMES[0], {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      endTime: this.formBuilder.control(TIMES[1], {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-    });
-  }
+  public constructor() {}
 
   public ngOnInit(): void {
-    this.getDegreeSubjects();
     this.getMonitoring();
   }
 
@@ -112,6 +73,15 @@ export class MyMonitoringPageComponent implements OnInit {
 
   public closeCreateMonitoringModal(): void {
     this.isCreateMonitoringModalOpen = false;
+  }
+
+  public openEditMonitoringModal(monitoring: Monitoring): void {
+    this.monitoringToEdit = monitoring;
+    this.isEditMonitoringModalOpen = true;
+  }
+
+  public closeEditMonitoringModal(): void {
+    this.isEditMonitoringModalOpen = false;
   }
 
   public getMonitoring(): void {
@@ -126,17 +96,7 @@ export class MyMonitoringPageComponent implements OnInit {
       });
   }
 
-  public getDegreeSubjects(): void {
-    this.degreeSubjectsService.findAll().subscribe({
-      next: (subjects) => {
-        this.subjects = subjects;
-      },
-    });
-  }
-
-  public createMonitoring(): void {
-    if (this.createMonitoringForm.invalid) return;
-
+  public createMonitoring(monitoringSubmitted: MonitoringSubmitted): void {
     const {
       title,
       description,
@@ -145,13 +105,13 @@ export class MyMonitoringPageComponent implements OnInit {
       weekDay,
       startTime,
       endTime,
-    } = this.createMonitoringForm.getRawValue();
+    } = monitoringSubmitted;
 
     const createMonitoringDto: CreateMonitoringDto = {
       title,
       description,
       maxAvailablePlaces,
-      subjectId: subject!.id,
+      subjectId: subject.id,
       availabilities: [
         {
           type: "weekly",
@@ -159,7 +119,7 @@ export class MyMonitoringPageComponent implements OnInit {
             type: "weekly",
             weekDays: [
               {
-                day: weekDay!.value,
+                day: weekDay.value,
                 time: { start: startTime.militar, end: endTime.militar },
               },
             ],
@@ -176,15 +136,79 @@ export class MyMonitoringPageComponent implements OnInit {
           detail: "Monitoria creada.",
         });
 
-        this.isCreateMonitoringModalOpen = false;
-
         this.getMonitoring();
+        this.closeCreateMonitoringModal();
       },
       error: (httpError: HttpErrorResponse) => {
         this.messageService.add({
           severity: "error",
           summary: "Error",
           detail: httpError.error.message,
+        });
+      },
+    });
+  }
+
+  public editMonitoring(monitoringSubmitted: MonitoringSubmitted): void {
+    const updateMonitoringDto: UpdateMonitoringDto = {
+      title: monitoringSubmitted.title,
+      description: monitoringSubmitted.description,
+      maxAvailablePlaces: monitoringSubmitted.maxAvailablePlaces,
+      subjectId: monitoringSubmitted.subject.id,
+    };
+
+    this.monitoringService
+      .update(this.monitoringToEdit!.id, updateMonitoringDto)
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: "success",
+            summary: "Éxito",
+            detail: "Monitoria actualizada.",
+          });
+
+          this.getMonitoring();
+          this.closeEditMonitoringModal();
+        },
+        error: (httpError: HttpErrorResponse) => {
+          this.messageService.add({
+            severity: "error",
+            summary: "Error",
+            detail: httpError.error.message,
+          });
+        },
+      });
+  }
+
+  public cancelMonitoring(monitoring: Monitoring): void {
+    this.confirmationService.confirm({
+      message:
+        "Si cancela, a los estudiantes agendados se les cancelará la monitoria",
+      header: "Cancelar monitoria",
+      icon: "pi pi-exclamation-triangle",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
+      acceptLabel: "Confirmar",
+      rejectLabel: "Cancelar",
+      accept: () => {
+        this.monitoringService.remove(monitoring.id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: "success",
+              summary: "Éxito",
+              detail: "Monitoria cancelada.",
+            });
+
+            this.getMonitoring();
+          },
+          error: (httpError: HttpErrorResponse) => {
+            this.messageService.add({
+              severity: "error",
+              summary: "Error",
+              detail: httpError.error.message,
+            });
+          },
         });
       },
     });

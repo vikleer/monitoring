@@ -6,6 +6,7 @@ import { FindAllMonitoringDto } from "@src/app/modules/monitoring/dto/find-all-m
 import { environment } from "@src/environments/environment";
 import { Observable } from "rxjs";
 import { CreateMonitoringDto } from "@src/app/modules/monitoring/dto/create-monitoring.dto";
+import { UpdateMonitoringDto } from "@src/app/modules/monitoring/dto/update-monitoring.dto";
 
 @Injectable({ providedIn: "root", useClass: MonitoringService })
 export class MonitoringService {
@@ -35,5 +36,20 @@ export class MonitoringService {
     const endpoint = `${environment.API_URL}/monitoring/${id}`;
 
     return this.httpClient.get<Monitoring>(endpoint);
+  }
+
+  public update(
+    monitoringId: string,
+    updateMonitoringDto: UpdateMonitoringDto,
+  ): Observable<Monitoring> {
+    const endpoint = `${environment.API_URL}/monitoring/${monitoringId}`;
+
+    return this.httpClient.patch<Monitoring>(endpoint, updateMonitoringDto);
+  }
+
+  public remove(monitoringId: string): Observable<void> {
+    const endpoint = `${environment.API_URL}/monitoring/${monitoringId}`;
+
+    return this.httpClient.delete<void>(endpoint);
   }
 }

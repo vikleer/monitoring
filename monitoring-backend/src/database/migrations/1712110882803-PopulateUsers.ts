@@ -4,8 +4,8 @@ export class PopulateUsers1712110882803 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
         INSERT INTO user_profiles (first_name, last_name, age, gender, overview, degree_id) VALUES
-        ('Ricardo', 'Rivera', 31, 'Male', 'Fullstack developer', (SELECT id FROM degrees WHERE name = 'Tecnología en Desarrollo de Software')),
-        ('Kevin', 'Sotto', 24, 'Male', 'Frontend developer', (SELECT id FROM degrees WHERE name = 'Tecnología en Desarrollo de Software'));
+        ('Ricardo', 'Rivera', 31, 'Masculino', 'Fullstack developer', (SELECT id FROM degrees WHERE name = 'Tecnología en Desarrollo de Software')),
+        ('Kevin', 'Sotto', 24, 'Masculino', 'Frontend developer', (SELECT id FROM degrees WHERE name = 'Tecnología en Desarrollo de Software'));
     `);
 
     await queryRunner.query(`
