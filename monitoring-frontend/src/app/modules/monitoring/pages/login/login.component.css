@@ -1,0 +1,41 @@
+.background-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  scroll-padding-top: 0;
+}
+
+.background-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: url('../../../../../assets/images/imagen-university.jpg');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden
+}
+
+.card{
+  margin-top: 10rem;
+  z-index: 1;
+}
+
+img {
+  margin-left: 5.9rem;
+  width: 10rem;
+  height: 10rem;
+}
+
+input {
+  margin-left: 4rem;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+p-button {
+  margin-left: 2.2rem;
+}
