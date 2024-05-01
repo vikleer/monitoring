@@ -1,0 +1,17 @@
+<div class="flex justify-content-center flex-wrap background-container">
+  <p-card class="card" [style]="{ width: '360px'}">
+    <ng-template pTemplate="header">
+        <img alt="logo" src="../../../../../assets/images/logo-login.png"/>
+    </ng-template>
+    <ng-template pTemplate="content" >
+      <form  [formGroup]="loginForm">
+        <input pInputText type="text" placeholder="Correo" formControlName="email"/>
+        <input pInputText type="text" placeholder="Contraseña" formControlName="password"/>
+        <a routerLink="/register" >Registrarse</a>
+      </form>
+    </ng-template>
+    <ng-template pTemplate="footer" >
+        <p-button label="Ingresar" (click)="validateUSer()" ></p-button>
+    </ng-template>
+  </p-card>
+</div>

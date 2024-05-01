@@ -37,5 +37,9 @@ input {
 }
 
 p-button {
-  margin-left: 2.2rem;
+  margin-left: 6rem;
+}
+
+a {
+  margin-left: 4rem;
 }

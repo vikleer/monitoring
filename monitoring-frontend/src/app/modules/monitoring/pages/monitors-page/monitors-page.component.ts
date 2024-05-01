@@ -1,8 +1,9 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { FooterComponent } from "@src/app/modules/common/components/footer/footer.component";
 import { NavbarComponent } from "@src/app/modules/common/components/navbar/navbar.component";
+import { UserService } from "@src/app/modules/common/services/user-service.service";
 import { MenuItem } from "primeng/api";
 import { TabMenuModule } from "primeng/tabmenu";
 
@@ -21,10 +22,12 @@ import { TabMenuModule } from "primeng/tabmenu";
 })
 export class MonitorsPageComponent implements OnInit {
   public items: MenuItem[] | undefined;
+  public userService = inject(UserService)
 
   public activeItem: MenuItem | undefined;
 
   public ngOnInit(): void {
+    this.userService;
     this.items = [
       {
         label: "Mis monitorias",

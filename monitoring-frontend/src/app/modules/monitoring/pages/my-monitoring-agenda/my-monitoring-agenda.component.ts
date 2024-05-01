@@ -7,6 +7,7 @@ import { environment } from "@src/environments/environment";
 import { TableModule } from "primeng/table";
 import { ButtonModule } from "primeng/button";
 import { RouterModule } from "@angular/router";
+import { UserService } from "@src/app/modules/common/services/user-service.service";
 
 @Component({
   selector: "app-my-monitoring-agenda",
@@ -18,16 +19,18 @@ import { RouterModule } from "@angular/router";
 export class MyMonitoringAgendaComponent implements OnInit {
   public monitoringAgendasService = inject(MonitoringAgendasService);
   public httpClient = inject(HttpClient);
+  public userService = inject(UserService)
 
   public monitoringAgendas: MonitoringAgenda[] = [];
 
   public ngOnInit(): void {
     this.getAgenda();
+    this.userService
   }
 
   public getAgenda(): void {
     this.monitoringAgendasService
-      .findCreated({ createdById: environment.USER_ID })
+      .findCreated({ createdById: this.userService.userID })
       .subscribe({
         next: (monitoringAgendas) => {
           this.monitoringAgendas = monitoringAgendas;

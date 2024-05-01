@@ -25,6 +25,7 @@ export class NavbarComponent {
     { label: "Monitorias", path: "/monitoring", exact: true },
     { label: "Estudiante", path: "/monitoring/students", exact: false },
     { label: "Monitor", path: "/monitoring/monitors", exact: false },
+    { label: "Cerrar sesion", path: "/login", exact: true},
   ];
 
   public openSidebar(): void {

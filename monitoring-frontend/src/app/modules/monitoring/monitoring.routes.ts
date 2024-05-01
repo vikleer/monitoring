@@ -3,20 +3,6 @@ import { monitoringResolver } from "@src/app/modules/monitoring/resolvers/monito
 
 export const routes: Routes = [
   {
-    path: "login",
-    loadComponent: () =>
-      import("./pages/login/login.component").then(
-        (m) => m.LoginComponent,
-      )
-  },
-  {
-    path: "register",
-    loadComponent: () =>
-      import("./pages/register/register.component").then(
-        (m) => m.RegisterComponent,
-      ),
-  },
-  {
     path: "",
     loadComponent: () =>
       import("./pages/monitoring-page/monitoring-page.component").then(
@@ -81,3 +67,4 @@ export const routes: Routes = [
     resolve: { monitoring: monitoringResolver },
   },
 ];
+

@@ -4,6 +4,7 @@ import { Component, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FooterComponent } from "@src/app/modules/common/components/footer/footer.component";
 import { NavbarComponent } from "@src/app/modules/common/components/navbar/navbar.component";
+import { UserService } from "@src/app/modules/common/services/user-service.service";
 import { formatDate } from "@src/app/modules/common/utils/format-date";
 import { getDatesInMonth } from "@src/app/modules/common/utils/get-dates-in-month";
 import { getEndOfMonth } from "@src/app/modules/common/utils/get-end-of-month";
@@ -55,6 +56,7 @@ export class MonitoringDetailPageComponent implements OnInit {
   public router = inject(Router);
   public confirmationService = inject(ConfirmationService);
   public messageService = inject(MessageService);
+  public userService = inject(UserService)
 
   public monitoring!: Monitoring;
   public monitoringAgendas: MonitoringAgenda[] = [];
@@ -74,6 +76,7 @@ export class MonitoringDetailPageComponent implements OnInit {
   public isAgendaDetailModalOpen = false;
 
   public ngOnInit(): void {
+    this.userService;
     this.activatedRoute.data.subscribe((data) => {
       this.monitoring = data["monitoring"] as Monitoring;
     });
