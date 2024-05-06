@@ -1,16 +1,10 @@
 import type { HttpInterceptorFn } from "@angular/common/http";
 import { inject } from "@angular/core";
-import { UserService } from "@src/app/modules/common/services/user-service.service";
-import { environment } from "@src/environments/environment";
-
-
+import { UserService } from "@src/app/modules/common/services/user.service";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const accessToken = inject(UserService);
 
-  const accessToken = inject(UserService)
-
-
-  // TODO: Get the token from storage
   const ACCESS_TOKEN = accessToken.accessToken;
 
   if (ACCESS_TOKEN) {

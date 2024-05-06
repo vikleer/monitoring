@@ -1,61 +1,87 @@
-import { Component, OnInit } from '@angular/core';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { Router, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '@src/environments/environment';
-import { UserService } from '@src/app/modules/common/services/user-service.service';
-import { jwtDecode } from 'jwt-decode';
-
-
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { Component, inject } from "@angular/core";
+import {
+  FormControl,
+  FormGroup,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+import { Router, RouterLink } from "@angular/router";
+import { LoginDto } from "@src/app/modules/auth/pages/login-page/login.dto";
+import { UserService } from "@src/app/modules/common/services/user.service";
+import { UsersService } from "@src/app/modules/common/services/users.service";
+import { environment } from "@src/environments/environment";
+import { jwtDecode } from "jwt-decode";
+import { MessageService } from "primeng/api";
+import { ButtonModule } from "primeng/button";
+import { CardModule } from "primeng/card";
+import { InputTextModule } from "primeng/inputtext";
+import { ToastModule } from "primeng/toast";
+import { switchMap, tap } from "rxjs";
 
 @Component({
-  selector: 'app-login-page',
+  selector: "app-login-page",
   standalone: true,
-  imports: [CardModule, ButtonModule, RouterLink, ReactiveFormsModule],
-  templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.css'
+  imports: [
+    CardModule,
+    ButtonModule,
+    RouterLink,
+    ReactiveFormsModule,
+    InputTextModule,
+    ToastModule,
+  ],
+  providers: [MessageService],
+  templateUrl: "./login-page.component.html",
+  styleUrl: "./login-page.component.css",
 })
 export class LoginPageComponent {
-
-  public loginForm!: FormGroup;
+  private usersService = inject(UsersService);
+  private messageService = inject(MessageService);
   private endpoint = `${environment.API_URL}/auth/sign-in`;
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private route: Router,
-    private userService: UserService
+
+  public loginForm!: FormGroup<{
+    email: FormControl<string>;
+    password: FormControl<string>;
+  }>;
+
+  public constructor(
+    private fb: NonNullableFormBuilder,
+    private httpClient: HttpClient,
+    private router: Router,
+    private userService: UserService,
   ) {
-
-  }
-
-  ngOnInit() {
-    //?
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
-    })
-
+      email: ["", Validators.required],
+      password: ["", Validators.required],
+    });
   }
 
-  /**
-   *
-   */
-  public validateUSer() {
-    this.http.post<{
-      accessToken: string;
-      refreshToken: string;
-    }>(this.endpoint, this.loginForm.getRawValue()).subscribe((data) => {
-      this.userService.accessToken = data.accessToken;
-      const decode = jwtDecode<{user: {id:string}}>(data.accessToken)
-      this.userService.userID = decode.user.id;
-      this.route.navigateByUrl('/monitoring')
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('UserID', decode.user.id);
-    })
-
-
+  public login(): void {
+    this.httpClient
+      .post<LoginDto>(this.endpoint, this.loginForm.getRawValue())
+      .pipe(
+        tap((login) => {
+          const decode = jwtDecode<{ user: { id: string } }>(login.accessToken);
+          this.userService.login(login.accessToken, decode.user.id);
+        }),
+        switchMap(() => {
+          return this.usersService.findOne(this.userService.userId).pipe();
+        }),
+        tap((user) => {
+          this.userService.setUser(user);
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.router.navigate(["/monitoring"]);
+        },
+        error: (httpError: HttpErrorResponse) => {
+          this.messageService.add({
+            severity: "error",
+            detail: httpError.error.message,
+          });
+        },
+      });
   }
-
 }

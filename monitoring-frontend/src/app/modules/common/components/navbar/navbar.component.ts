@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { Component, inject } from "@angular/core";
+import { Router, RouterModule } from "@angular/router";
+import { UserService } from "@src/app/modules/common/services/user.service";
 import { ButtonModule } from "primeng/button";
 import { SidebarModule } from "primeng/sidebar";
 import { TooltipModule } from "primeng/tooltip";
@@ -19,16 +20,28 @@ import { TooltipModule } from "primeng/tooltip";
   styleUrl: "./navbar.component.css",
 })
 export class NavbarComponent {
+  public router = inject(Router);
+  public userService = inject(UserService);
+
   public isSidebarOpen = false;
 
   public links: { label: string; path: string; exact: boolean }[] = [
     { label: "Monitorias", path: "/monitoring", exact: true },
     { label: "Estudiante", path: "/monitoring/students", exact: false },
     { label: "Monitor", path: "/monitoring/monitors", exact: false },
-    { label: "Cerrar sesion", path: "/login", exact: true},
   ];
 
   public openSidebar(): void {
     this.isSidebarOpen = true;
+  }
+
+  public logout(): void {
+    this.userService.logout();
+    this.router.navigate(["/login"]);
+  }
+
+  public get userName(): string {
+    const { firstName, lastName } = this.userService.user!.profile;
+    return `${firstName} ${lastName}`;
   }
 }

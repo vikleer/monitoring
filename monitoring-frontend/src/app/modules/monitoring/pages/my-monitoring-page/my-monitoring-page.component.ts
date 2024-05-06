@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MilitaryToNormalTimePipe } from "@src/app/modules/common/pipes/military-to-normal-time.pipe";
 import { WeekDayPipe } from "@src/app/modules/common/pipes/week-day.pipe";
-import { UserService } from "@src/app/modules/common/services/user-service.service";
+import { UserService } from "@src/app/modules/common/services/user.service";
 import { MonitoringManagementComponent } from "@src/app/modules/monitoring/components/monitoring-management/monitoring-management.component";
 import { CreateMonitoringDto } from "@src/app/modules/monitoring/dto/create-monitoring.dto";
 import { UpdateMonitoringDto } from "@src/app/modules/monitoring/dto/update-monitoring.dto";
@@ -54,7 +54,7 @@ export class MyMonitoringPageComponent implements OnInit {
   public monitoringService = inject(MonitoringService);
   public confirmationService = inject(ConfirmationService);
   public messageService = inject(MessageService);
-  public userServie = inject(UserService);
+  public userService = inject(UserService);
 
   public monitoring: Monitoring[] = [];
 
@@ -67,7 +67,6 @@ export class MyMonitoringPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.getMonitoring();
-    this.userServie;
   }
 
   public openCreateMonitoringModal(): void {
@@ -90,7 +89,7 @@ export class MyMonitoringPageComponent implements OnInit {
   public getMonitoring(): void {
     this.monitoringService
       .findAll({
-        createdBy: environment.USER_ID,
+        createdBy: this.userService.userId,
       })
       .subscribe({
         next: (monitoring) => {

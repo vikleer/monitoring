@@ -4,7 +4,7 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { FooterComponent } from "@src/app/modules/common/components/footer/footer.component";
 import { NavbarComponent } from "@src/app/modules/common/components/navbar/navbar.component";
-import { UserService } from "@src/app/modules/common/services/user-service.service";
+import { UserService } from "@src/app/modules/common/services/user.service";
 import { Monitoring } from "@src/app/modules/monitoring/entities/monitoring";
 import { MonitoringService } from "@src/app/modules/monitoring/services/monitoring/monitoring.service";
 import { ButtonModule } from "primeng/button";
@@ -30,7 +30,7 @@ import { debounceTime } from "rxjs";
 })
 export class MonitoringPageComponent implements OnInit {
   public monitoringService = inject(MonitoringService);
-  public userService = inject(UserService)
+  public userService = inject(UserService);
 
   public searchControl = new FormControl("", { nonNullable: true });
   public monitoring: Monitoring[] = [];

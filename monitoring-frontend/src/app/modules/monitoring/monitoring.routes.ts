@@ -67,4 +67,3 @@ export const routes: Routes = [
     resolve: { monitoring: monitoringResolver },
   },
 ];
-
