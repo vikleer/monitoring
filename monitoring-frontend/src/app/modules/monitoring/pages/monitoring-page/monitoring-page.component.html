@@ -7,7 +7,7 @@
       <input
         type="text"
         pInputText
-        placeholder="Busque por título o descripción"
+        placeholder="Busque por título, descripción o monitor"
         [formControl]="searchControl"
         class="w-full"
       />
@@ -30,11 +30,16 @@
               />
             </header>
             <div class="text-gray-500 p-3">
-              <h2 class="text-lg mb-1">{{ monitoring.title }}</h2>
+              <h2 class="text-lg mb-1">
+                {{ monitoring.title }} -
+                {{ monitoring.createdBy.profile.firstName }}
+              </h2>
               <p class="text-md font-semibold text-gray-400 mb-2">
                 {{ monitoring.subject.name }}
               </p>
-              <p>{{ monitoring.description }}</p>
+              <p class="line-clamp line-clamp-3">
+                {{ monitoring.description }}
+              </p>
             </div>
             <footer class="p-3">
               <p-button

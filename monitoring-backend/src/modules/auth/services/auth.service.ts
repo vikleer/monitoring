@@ -103,7 +103,7 @@ export class AuthService {
       withDeleted: true,
     });
 
-    if (existingUser) throw new ConflictException("User already exists");
+    if (existingUser) throw new ConflictException("El usuario ya existe.");
 
     // Hash password
     const passwordHash = await hash(signUpDto.password);

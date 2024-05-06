@@ -6,10 +6,12 @@ import { MonitoringSchedule } from "@src/app/modules/monitoring/entities/monitor
 import { environment } from "@src/environments/environment";
 import { Observable } from "rxjs";
 import { FindAllMonitoringSchedule } from "../../dto/find-all-monitoring-schedule.dto";
+import { UserService } from "@src/app/modules/common/services/user.service";
 
 @Injectable({ providedIn: "root" })
 export class MonitoringSchedulesService {
   public httpClient = inject(HttpClient);
+  public userService = inject(UserService);
 
   public schedule(
     scheduleMonitoringDto: ScheduleMonitoringDto,
@@ -24,7 +26,7 @@ export class MonitoringSchedulesService {
     const endpoint = `${environment.API_URL}/monitoring-schedules`;
 
     const params = setUpQueryParams({
-      userId: findAllMonitoringScheduleDto.userId,
+      userId: this.userService.userId,
     });
 
     return this.httpClient.get<MonitoringSchedule[]>(endpoint, { params });

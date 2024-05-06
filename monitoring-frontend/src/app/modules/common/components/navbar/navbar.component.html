@@ -1,13 +1,13 @@
 <header class="bg-white p-3 border-bottom-1 border-200">
   <div class="navbar-content flex justify-content-between align-items-center">
-    <a routerLink="/">
+    <a routerLink="/monitoring">
       <img
         src="/assets/images/logo.png"
         alt="Logo de la Universidad Católica de Pereira"
         class="h-3rem"
       />
     </a>
-    <div class="hidden gap-6 ml-auto md:flex align-items-center">
+    <div class="hidden gap-6 md:flex align-items-center">
       <div class="flex gap-3">
         @for (link of links; track link.path) {
           <a
@@ -20,11 +20,16 @@
           </a>
         }
       </div>
+    </div>
+    <div class="hidden md:flex gap-3 align-items-center">
+      <p class="text-lg">{{ userName }}</p>
       <p-button
-        icon="pi pi-user"
+        icon="pi pi-sign-out"
         [rounded]="true"
         [outlined]="true"
-        pTooltip="Perfil"
+        size="small"
+        (onClick)="logout()"
+        pTooltip="Cerrar sesión"
         tooltipPosition="bottom"
       ></p-button>
     </div>
@@ -48,6 +53,7 @@
       />
     </a>
   </ng-template>
+  <p class="text-xl mb-4">{{ userName }}</p>
   <div class="flex flex-column gap-3">
     @for (link of links; track link.path) {
       <a
@@ -59,5 +65,13 @@
         {{ link.label | uppercase }}
       </a>
     }
+    <a
+      tabindex="0"
+      class="cursor-pointer no-underline text-gray-600 font-semibold"
+      (click)="logout()"
+      (keypress.enter)="logout()"
+    >
+      CERRAR SESIÓN
+    </a>
   </div>
 </p-sidebar>

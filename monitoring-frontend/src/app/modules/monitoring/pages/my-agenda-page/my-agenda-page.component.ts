@@ -10,6 +10,7 @@ import { TableModule } from "primeng/table";
 import { TooltipModule } from "primeng/tooltip";
 import { ToastModule } from "primeng/toast";
 import { environment } from "@src/environments/environment";
+import { UserService } from "@src/app/modules/common/services/user.service";
 
 @Component({
   selector: "app-my-agenda-page",
@@ -28,6 +29,7 @@ import { environment } from "@src/environments/environment";
   styleUrl: "./my-agenda-page.component.css",
 })
 export class MyAgendaPageComponent implements OnInit {
+  public userService = inject(UserService);
   public monitoringScheduleService = inject(MonitoringSchedulesService);
 
   public confirmationService = inject(ConfirmationService);
@@ -43,7 +45,8 @@ export class MyAgendaPageComponent implements OnInit {
   public getMonitoringSchedules(): void {
     // TODO: Get id from storage
     this.monitoringScheduleService
-      .findAll({ userId: environment.USER_ID })
+      //*.findAll({ userId: this.userService.userID })
+      .findAll({ userId: this.userService.userId })
       .subscribe({
         next: (monitoringSchedules) => {
           this.monitoringSchedules = monitoringSchedules;

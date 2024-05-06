@@ -1,0 +1,46 @@
+<p-toast></p-toast>
+
+<div class="flex justify-content-center flex-wrap background-container">
+  <p-card class="card">
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-center align-items-center">
+        <img
+          alt="logo"
+          src="/assets/images/logo-login.png"
+          class="w-10rem mt-4"
+        />
+      </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+      <form [formGroup]="loginForm" class="flex flex-column gap-3">
+        <input
+          pInputText
+          type="text"
+          placeholder="Correo electrónico"
+          formControlName="email"
+          class="w-full"
+        />
+        <input
+          pInputText
+          type="password"
+          placeholder="Contraseña"
+          formControlName="password"
+          class="w-full"
+        />
+        <p-button
+          type="submit"
+          label="Ingresar"
+          (click)="login()"
+          styleClass="w-full"
+          [disabled]="loginForm.invalid"
+        ></p-button>
+      </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <p class="text-center">
+        <span>¿No tienes una cuenta?</span>
+        <a routerLink="/register" class="no-underline"> Registrate</a>
+      </p>
+    </ng-template>
+  </p-card>
+</div>

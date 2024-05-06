@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsNotEmptyObject,
   IsString,
+  MinLength,
   ValidateNested,
 } from "class-validator";
 
@@ -25,6 +26,7 @@ export class CreateUserDto {
   })
   @IsNotEmpty()
   @IsString()
+  @MinLength(6)
   public password!: string;
 
   @IsNotEmptyObject()

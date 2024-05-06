@@ -32,6 +32,20 @@
           </td>
           <td>
             <div class="flex gap-2">
+              <a
+                href="mailto: {{
+                  monitoringSchedule.agenda.monitoring.createdBy.email
+                }}"
+              >
+                <p-button
+                  pTooltip="Contactar monitor"
+                  tooltipPosition="bottom"
+                  icon="pi pi-envelope"
+                  [rounded]="true"
+                  [outlined]="true"
+                  role="link"
+                ></p-button>
+              </a>
               <p-button
                 role="link"
                 icon="pi pi-info"
@@ -51,13 +65,6 @@
                 [rounded]="true"
                 [outlined]="true"
                 (onClick)="openUnscheduleMonitoringModal(monitoringSchedule)"
-              ></p-button>
-              <p-button
-                pTooltip="Ir a reunión"
-                tooltipPosition="bottom"
-                icon="pi pi-external-link"
-                [rounded]="true"
-                [outlined]="true"
               ></p-button>
             </div>
           </td>
