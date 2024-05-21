@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { HomeComponent } from "@src/app/modules/monitoring/pages/home/home/home.component";
 import { monitoringResolver } from "@src/app/modules/monitoring/resolvers/monitoring.resolver";
 
 export const routes: Routes = [
@@ -8,6 +9,27 @@ export const routes: Routes = [
       import("./pages/monitoring-page/monitoring-page.component").then(
         (m) => m.MonitoringPageComponent,
       ),
+  },
+  {
+    path: "home",
+    loadComponent: () =>
+      import("./pages/home/home/home.component").then(
+        (m) => m.HomeComponent,
+      )
+  },
+  {
+    path: "profile",
+    loadComponent: () =>
+      import("./pages/profile/profile.component").then(
+        (m) => m.ProfileComponent,
+      )
+  },
+  {
+    path: "edit-profile",
+    loadComponent: () =>
+      import("./pages/edit-profile/edit-profile.component").then(
+        (m) => m.EditProfileComponent,
+      )
   },
   {
     path: "students",

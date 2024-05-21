@@ -6,3 +6,12 @@
   max-width: 1024px;
   margin: 0 auto;
 }
+
+.text-xl .mb-4 {
+  cursor: pointer;
+}
+
+.text-lg {
+  cursor: pointer;
+}
+

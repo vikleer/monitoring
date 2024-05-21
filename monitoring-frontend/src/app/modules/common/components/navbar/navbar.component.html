@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="hidden md:flex gap-3 align-items-center">
-      <p class="text-lg">{{ userName }}</p>
+      <p class="text-lg"  routerLink="/monitoring/profile">{{ userName }}</p>
       <p-button
         icon="pi pi-sign-out"
         [rounded]="true"
@@ -53,7 +53,7 @@
       />
     </a>
   </ng-template>
-  <p class="text-xl mb-4">{{ userName }}</p>
+  <p class="text-xl mb-4" routerLink="/monitoring/profile">{{ userName }}</p>
   <div class="flex flex-column gap-3">
     @for (link of links; track link.path) {
       <a

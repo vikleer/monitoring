@@ -29,6 +29,8 @@ import { CalendarModule, CalendarMonthChangeEvent } from "primeng/calendar";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { DialogModule } from "primeng/dialog";
 import { ToastModule } from "primeng/toast";
+import { TableModule } from 'primeng/table';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
   selector: "app-monitoring-detail-page",
@@ -42,6 +44,8 @@ import { ToastModule } from "primeng/toast";
     ToastModule,
     NavbarComponent,
     FooterComponent,
+    TableModule,
+    PanelModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: "./monitoring-detail-page.component.html",

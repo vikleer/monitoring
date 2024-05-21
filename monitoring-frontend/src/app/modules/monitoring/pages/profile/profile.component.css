@@ -1,0 +1,91 @@
+/* styles.css */
+.profile-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas con el mismo ancho */
+  gap: 2px; /* Espacio entre las columnas */
+  width: 80%; /* Ajusta el ancho según tus necesidades */
+  margin: 0 auto; /* Centra el contenido horizontalmente */
+  margin-top: 25px;
+}
+
+.profile-name {
+  width: 300px;
+  height: 250px;
+  background-color: white;
+  border-radius: 25%;
+  display: flex;
+  flex-direction: column; /* Cambia la dirección de los elementos */
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-shadow: 2px 6px 10px rgba(40, 36, 36, 0.718);
+}
+
+.student-label {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.student-name {
+  font-size: 20px;
+}
+
+
+
+.profile-details {
+  background-color: white;
+  border-radius: 10%;
+  display: flex;
+  flex-direction: column; /* Cambia la dirección de los elementos */
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 6px 10px rgba(40, 36, 36, 0.718);
+}
+
+.profile-info {
+  display: flex; /* Los dos primeros párrafos estarán en la misma fila */
+  justify-content: space-between; /* Espacio entre los párrafos */
+  width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+.profile-info p, .profile-details p {
+  color: gray;
+  font-size: 20px;
+  padding: 10px; /* Agrega un espacio interno */
+}
+
+
+.profile-name p, .profile-details p {
+  color: gray;
+  font-size: 20px;
+  padding: 10px; /* Agrega un espacio interno */
+}
+
+.about-me {
+  height: 100px;
+  margin-top: 30px;
+  margin-bottom: 25px;
+  grid-column: 1 / span 2; /* Ocupa dos columnas */
+  grid-row: 2; /* En la segunda fila */
+  background-color: white;
+  border-radius: 2%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  box-shadow: 2px 6px 10px rgba(40, 36, 36, 0.718);
+}
+
+.about-me-label {
+  font-size: 20px;
+  margin-top: -116px;
+}
+
+
+.about-me-txt {
+  font-size: 25px;
+}
+
+.button {
+  width: 145px;
+  margin-bottom: 30px;
+}

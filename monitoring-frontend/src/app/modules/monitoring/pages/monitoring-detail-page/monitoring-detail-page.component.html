@@ -7,34 +7,50 @@
   >
     <h1>{{ monitoring.title }}</h1>
     <h2 class="mb-3">{{ monitoring.subject.name }}</h2>
+    <hr style="border-color: gray;">
     <p class="mb-3">{{ monitoring.description }}</p>
     <div class="flex flex-column gap-2 mb-3">
       <h3 class="font-bold">Información sobre el monitor</h3>
-      <p>
-        <span class="font-bold">Nombre</span>
-        <span>
-          {{ monitoring.createdBy.profile.firstName }}
-          {{ monitoring.createdBy.profile.lastName }}
-        </span>
-      </p>
-      <p>
-        <span class="font-bold">Correo electrónico</span>
-        <span>
-          {{ monitoring.createdBy.email }}
-        </span>
-      </p>
-      <p>
-        <span class="font-bold">Edad</span>
-        <span>
-          {{ monitoring.createdBy.profile.age }}
-        </span>
-      </p>
-      <p>
-        <span class="font-bold">Género</span>
-        <span>
-          {{ monitoring.createdBy.profile.gender }}
-        </span>
-      </p>
+      <br>
+      <div class="two-column-grid">
+        <div class="column">
+          <div class="row">
+            <p>
+              <span class="font-bold">Nombre</span>
+              <span>
+                {{ monitoring.createdBy.profile.firstName }}
+                {{ monitoring.createdBy.profile.lastName }}
+              </span>
+            </p>
+          </div>
+          <div class="row">
+            <p>
+              <span class="font-bold">Edad</span>
+              <span>
+                {{ monitoring.createdBy.profile.age }}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div class="column">
+          <div class="row">
+            <p>
+              <span class="font-bold">Correo electrónico</span>
+              <span>
+                {{ monitoring.createdBy.email }}
+              </span>
+            </p>
+          </div>
+          <div class="row">
+            <p>
+              <span class="font-bold">Género</span>
+              <span>
+                {{ monitoring.createdBy.profile.gender }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
       <p>
         <span class="font-bold">Sobre mí</span>
         <span>

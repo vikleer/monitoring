@@ -23,11 +23,17 @@
             class="monitoring-item flex flex-column justify-content-between shadow-1 border-round"
           >
             <header class="mb-3">
-              <img
-                alt="Card"
-                src="https://primefaces.org/cdn/primeng/images/usercard.png"
-                class="border-round-top"
-              />
+              <div [ngSwitch]="monitoring.subject.name">
+                <img *ngSwitchCase="'Matemáticas'" alt="Card" src="../../../../../assets/images/matematicas.jpg" alt="">
+                <img *ngSwitchCase="'Trabajo de Intervención Empresarial'" alt="Card" src="../../../../../assets/images/Trabajo empresarial.jpg" alt="">
+                <img *ngSwitchCase="'Creatividad e Innovación'" alt="Card" src="../../../../../assets/images/creatividad e innovacion.jpg" alt="">
+                <img *ngSwitchCase="'Expresión Oral y Escrita'" alt="Card" src="../../../../../assets/images/Expresion oral y escrita.jpg" height="235px" width="375px">
+                <img *ngSwitchCase="'Deporte'" alt="Card" src="../../../../../assets/images/Deporte.jpg" alt="">
+                <img *ngSwitchCase="'Bases de Datos I'" alt="Card" src="../../../../../assets/images/Bases de Datos I.jpg" alt="">
+                <img *ngSwitchCase="'Desarrollo de Software I'" src="../../../../../assets/images/Desarrollo de Software I.jpg" alt="Card" height="265px">
+                <img *ngSwitchCase="'Desarrollo de Software II'" src="../../../../../assets/images/Desarrollo de Software II.jpg" alt="Card">
+                <img *ngSwitchCase="'Desarrollo de Software III'" src="../../../../../assets/images/Desarrollo de Software III.jpg" alt="Card">
+              </div>
             </header>
             <div class="text-gray-500 p-3">
               <h2 class="text-lg mb-1">

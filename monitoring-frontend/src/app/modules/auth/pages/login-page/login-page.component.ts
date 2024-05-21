@@ -74,7 +74,7 @@ export class LoginPageComponent {
       )
       .subscribe({
         next: () => {
-          this.router.navigate(["/monitoring"]);
+          this.router.navigate(["/monitoring/home"]);
         },
         error: (httpError: HttpErrorResponse) => {
           this.messageService.add({

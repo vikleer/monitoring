@@ -26,6 +26,7 @@ export class NavbarComponent {
   public isSidebarOpen = false;
 
   public links: { label: string; path: string; exact: boolean }[] = [
+    { label: "Inicio", path: "/monitoring/home", exact: false},
     { label: "Monitorias", path: "/monitoring", exact: true },
     { label: "Estudiante", path: "/monitoring/students", exact: false },
     { label: "Monitor", path: "/monitoring/monitors", exact: false },
@@ -43,5 +44,9 @@ export class NavbarComponent {
   public get userName(): string {
     const { firstName, lastName } = this.userService.user!.profile;
     return `${firstName} ${lastName}`;
+  }
+
+  public profile(): void {
+    this.router.navigate(["/profile"]);
   }
 }

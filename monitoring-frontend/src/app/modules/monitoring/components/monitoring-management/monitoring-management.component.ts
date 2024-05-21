@@ -14,6 +14,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
+import { MAXPLACES } from "@src/app/modules/monitoring/constants/maxPlaces";
 import { TIMES } from "@src/app/modules/monitoring/constants/times";
 import { WEEKDAYS } from "@src/app/modules/monitoring/constants/weekdays";
 import { DegreeSubject } from "@src/app/modules/monitoring/entities/degree-subject";
@@ -27,6 +28,7 @@ import { DropdownModule } from "primeng/dropdown";
 import { InputNumberModule } from "primeng/inputnumber";
 import { InputTextModule } from "primeng/inputtext";
 import { InputTextareaModule } from "primeng/inputtextarea";
+import { SelectItem } from 'primeng/api';
 
 @Component({
   selector: "app-monitoring-management",
@@ -65,6 +67,12 @@ export class MonitoringManagementComponent implements OnInit, OnChanges {
   public subjects: DegreeSubject[] = [];
   public weekDays = WEEKDAYS;
   public times = TIMES;
+
+  public maxAvailablePlacesOptions: SelectItem[] = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 }
+  ];
 
   public constructor() {
     this.setupInitialForm();

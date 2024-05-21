@@ -1,0 +1,56 @@
+<div class="page-layout">
+  <app-navbar></app-navbar>
+  <div class="profile-container">
+    <div class="profile-name">
+      <p class="student-label"><strong>Nombre de estudiante: </strong></p>
+      <p class="student-name">{{ profile.firstName }} {{ profile.lastName }}</p>
+    </div>
+    <div class="profile-details">
+      <div class="profile-info">
+        <p><strong>Genero:</strong> <span>{{ gender }}</span></p>
+        <p><strong>Edad:</strong> <span>{{ profile.age }}</span></p>
+      </div>
+      <p><strong class="email-txt">Email:</strong> <span>{{ dataProfile?.email }}</span></p>
+    </div>
+    <div class="about-me">
+
+      <p class="about-me-label"><strong>Sobre mi:</strong></p>
+      <p class="about-me-text"> {{dataProfile?.profile?.overview}} </p>
+    </div>
+    <p-button class="button" label="Editar perfil" (onClick)="onClick()"></p-button>
+  </div>
+  <app-footer></app-footer>
+  <!-- <div class="profile-container"> -->
+    <!-- <div class="profile-header"> -->
+      <!-- <div class="profile-info"> -->
+        <!-- <h2> {{ profile.firstName}} {{profile.lastName}} </h2> -->
+<!--  -->
+        <!-- <p> <b>Genero: </b><span> -->
+          <!-- {{gender}} -->
+        <!-- </span></p> -->
+        <!-- <br> -->
+        <!-- <p> <b>Edad: </b> <span>{{profile.age}}</span> </p> -->
+      <!-- </div> -->
+    <!-- </div> -->
+    <!-- <div class="profile-details"> -->
+      <!-- <div class="detail-item"> -->
+        <!-- <span class="detail-label">Nombre:</span> -->
+        <!-- <span class="detail-value"> {{profile.firstName}} </span> -->
+      <!-- </div> -->
+      <!-- <br> -->
+      <!-- <div class="detail-item"> -->
+        <!-- <span class="detail-label">Correo electrónico:</span> -->
+        <!-- <span class="detail-value"> {{dataProfile?.email}} </span> -->
+      <!-- </div> -->
+      <!-- <br> -->
+      <!-- <div class="detail-item"> -->
+        <!-- <span class="detail-label">Sobre mi:</span> -->
+        <!-- <span class="detail-value"> {{dataProfile?.profile?.overview}} </span> -->
+      <!-- </div> -->
+    <!-- </div> -->
+    <!-- <div class="profile-actions"> -->
+      <!-- <p-button label="Editar perfil" (onClick)="editProfile()"></p-button> -->
+      <!-- <p-button label="Editar perfil" (click)="onClick()"></p-button> -->
+    <!-- </div> -->
+  <!-- </div> -->
+</div>

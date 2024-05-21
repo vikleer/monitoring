@@ -1,0 +1,112 @@
+<p-toast></p-toast>
+<div class="page-layout">
+  <app-navbar></app-navbar>
+  <p-card header="Actualiza tu perfil" class="flex justify-content-center flex-wrap my-3">
+    <form
+    [formGroup]="updateUserData"
+    class="flex flex-column gap-2">
+    <!-- Email -->
+    <div class="flex flex-column gap-2 w-full">
+      <label for="email">Correo electrónico</label>
+      <input
+      pInputText
+      id="email"
+      styleClass="w-full"
+      formControlName="email"
+      >
+    </div>
+    <!-- Email -->
+    <!-- Password -->
+    <div class="flex flex-column gap-2 w-full">
+      <label for="password">Password</label>
+      <input
+      pInputText
+      id="password"
+      styleClass="w-full"
+      formControlName="password"
+      >
+    </div>
+    <!-- Password -->
+    <section formGroupName="profile">
+      <!-- First name  -->
+      <div class="flex flex-column gap-2 w-full">
+        <label for="firstName">firstName</label>
+        <input
+        pInputText
+        id="firstName"
+        styleClass="w-full"
+        formControlName="firstName"
+        >
+      </div>
+      <!--  First name -->
+      <!--  Lastname  -->
+      <div class="flex flex-column gap-2 w-full">
+        <label for="lastName">Apellido</label>
+        <input
+        pInputText
+        id="lastName"
+        styleClass="w-full"
+        formControlName="lastName"
+        >
+      </div>
+      <!--  Lastname -->
+      <!-- Age -->
+      <label for="age">Edad</label>
+      <div class="flex flex-column gap-2 w-full">
+        <p-inputNumber
+        id="age"
+        inputId="integeronly"
+        styleClass="w-full"
+        formControlName="age"
+        />
+      </div>
+      <!-- Age -->
+      <!-- Gender -->
+      <label for="gender">Genero</label>
+      <div class="flex flex-column gap-2 w-full">
+        <p-dropdown
+        id="gender"
+        optionLabel="name"
+        placeholder="Selecciona tu género"
+        formControlName="gender"
+        [showClear]="true"
+        [options]="genderOptions"
+        styleClass="w-full"
+      ></p-dropdown>
+      </div>
+      <!-- Gender -->
+      <!-- About me -->
+      <div class="flex flex-column flex-1 gap-2">
+        <label for="overview">Sobre ti</label>
+        <textarea
+          rows="5"
+          cols="30"
+          pInputTextarea
+          formControlName="overview"
+        ></textarea>
+      </div>
+      <!-- About me -->
+      <!-- Degree  -->
+      <div class="flex flex-column flex-1 gap-2">
+        <label for="degreed">Carrera</label>
+        <p-dropdown
+          id="degree"
+          optionLabel="name"
+          placeholder="Selecciona tu carrera"
+          formControlName="degree"
+          [showClear]="true"
+          styleClass="w-full"
+          [options]="degreeOptions"
+        ></p-dropdown>
+      </div>
+    </section>
+      <p-button
+      type="submit"
+      label="Actualizar"
+      (click)="updateUser()"
+      styleClass="w-full"
+      ></p-button>
+    <!-- Degree  -->
+    </form>
+  </p-card>
+</div>

@@ -65,6 +65,7 @@ export class RegisterPageComponent implements OnInit {
   public genders = [
     { name: "Masculino", value: "Masculino" },
     { name: "Femenino", value: "Femenino" },
+    { name: "Otro", value: "Femenino"}
   ];
 
   public degress: Degree[] = [];
