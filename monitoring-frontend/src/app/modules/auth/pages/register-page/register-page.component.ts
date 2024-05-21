@@ -102,6 +102,7 @@ export class RegisterPageComponent implements OnInit {
       .pipe(take(1))
       .subscribe((data: Degree[]) => {
         this.degress = data;
+        console.warn(data);
       });
   }
 
