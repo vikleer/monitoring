@@ -78,9 +78,11 @@ export class RegisterPageComponent implements OnInit {
     private messageService: MessageService,
     private degreesService: DegreesService,
   ) {
+    const alphanumericValidator = Validators.pattern(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/);
+
     this.registerForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(6)]],
+      password: ["", [Validators.required, alphanumericValidator, Validators.minLength(6)]],
       profile: this.fb.group({
         firstName: ["", [Validators.required]],
         lastName: ["", [Validators.required]],

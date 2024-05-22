@@ -37,6 +37,9 @@
       @if (registerForm.controls.password.hasError("minlength")) {
         <p class="text-red-600">La contraseña debe tener mínimo 6 carácteres</p>
       }
+      @else if(registerForm.controls['password'].hasError('pattern') && !registerForm.controls['password'].hasError('minlength')) {
+        <p class="text-red-600">La contraseña debe contener al menos una letra y un número</p>
+      }
     </div>
     <!-- Password -->
     <!-- Profile -->
