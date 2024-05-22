@@ -9,6 +9,7 @@ import {
 } from "@angular/forms";
 import { Router, RouterLink } from "@angular/router";
 import { LoginDto } from "@src/app/modules/auth/pages/login-page/login.dto";
+import { SweetAlertService } from "@src/app/modules/auth/services/sweet-alert/sweet-alert.service";
 import { UserService } from "@src/app/modules/common/services/user.service";
 import { UsersService } from "@src/app/modules/common/services/users.service";
 import { environment } from "@src/environments/environment";
@@ -36,6 +37,7 @@ import { switchMap, tap } from "rxjs";
   styleUrl: "./login-page.component.css",
 })
 export class LoginPageComponent {
+  private Swal = inject(SweetAlertService)
   private usersService = inject(UsersService);
   private messageService = inject(MessageService);
   private endpoint = `${environment.API_URL}/auth/sign-in`;
@@ -74,6 +76,7 @@ export class LoginPageComponent {
       )
       .subscribe({
         next: () => {
+          this.Swal.showLoginSuccessNotification();
           this.router.navigate(["/monitoring/home"]);
         },
         error: (httpError: HttpErrorResponse) => {
@@ -84,4 +87,10 @@ export class LoginPageComponent {
         },
       });
   }
+
+  public infoContact() {
+    this.Swal.contactInformation();
+  }
+
 }
+

@@ -88,40 +88,45 @@ export class EditProfileComponent {
     );
   }
 
-  public updateUser(){
+  public updateUser() {
     const data = this.updateUserData.getRawValue();
-    console.warn(data)
+    console.warn(data);
+
+    const profile = data.profile || {};
+
     const valueForm = {
-      email: data.email,
-      password: data.password,
+      email: data.email || '',
+      password: data.password || '',
       profile: {
-        firstName: data.profile.firstName,
-        lastName: data.profile.lastName,
-        age: data.profile.age,
-        gender: data.profile.gender?.name,
-        overview: data.profile.overview,
-        degree: data.profile.degree?.id
+        firstName: profile.firstName || '',
+        lastName: profile.lastName || '',
+        age: profile.age !== undefined && profile.age !== null ? profile.age : null,
+        gender: profile.gender ? profile.gender.name : null,
+        overview: profile.overview || '',
+        degree: profile.degree ? profile.degree.id : null
       }
-    }
+    };
 
     this.http.patch<User>(this.endPoint, cleanObject(valueForm)).subscribe(
       (value: User) => {
+        // Suponiendo que tienes un userService para manejar el usuario
         this.userService.setUser(value);
         this.messageService.add({
-          severity: "success",
-          summary: "Éxito",
-          detail: "Usuario Actualizado exitosamente",
-        })
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Usuario Actualizado exitosamente',
+          closable: false
+        });
         setTimeout(() => {
-          this.router.navigate(["/monitoring/profile"]);
+          this.router.navigate(['/monitoring/profile']);
         }, 2000);
       },
       (error) => {
         this.messageService.add({
-          severity: "error",
-          detail: "Error al actualizar el perfil",
-        })
+          severity: 'error',
+          detail: 'Error al actualizar el perfil',
+        });
       }
-    )
+    );
   }
 }

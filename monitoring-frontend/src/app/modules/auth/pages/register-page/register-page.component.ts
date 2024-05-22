@@ -10,6 +10,7 @@ import {
 } from "@angular/forms";
 import { Router, RouterModule } from "@angular/router";
 import { DegreesService } from "@src/app/modules/auth/services/degrees.service";
+import { SweetAlertService } from "@src/app/modules/auth/services/sweet-alert/sweet-alert.service";
 import { Degree } from "@src/app/modules/auth/types/degree";
 import { environment } from "@src/environments/environment";
 import { MessageService } from "primeng/api";
@@ -48,6 +49,7 @@ export class RegisterPageComponent implements OnInit {
   private endpoint = `${environment.API_URL}/auth/sign-up`;
 
   public httpClient = inject(HttpClient);
+  private swal = inject(SweetAlertService)
 
   public registerForm!: FormGroup<{
     email: FormControl<string>;
@@ -112,7 +114,7 @@ export class RegisterPageComponent implements OnInit {
     const values = this.registerForm.getRawValue();
 
     const createUserDto = {
-      email: values.email,
+      email: values.email.toLowerCase(),
       password: values.password,
       profile: {
         firstName: values.profile.firstName,
@@ -126,10 +128,11 @@ export class RegisterPageComponent implements OnInit {
 
     this.httpClient.post(this.endpoint, createUserDto).subscribe({
       next: () => {
-        this.messageService.add({
-          severity: "sucess",
-          detail: "Usuario registrado exitosamente",
-        });
+        this.swal.showRegisterSuccessNotification();
+        //*this.messageService.add({
+        //*  severity: "sucess",
+        //*  detail: "Usuario registrado exitosamente",
+        //*});
 
         this.router.navigate(["/login"]);
       },
