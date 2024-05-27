@@ -37,7 +37,7 @@ import { switchMap, tap } from "rxjs";
   styleUrl: "./login-page.component.css",
 })
 export class LoginPageComponent {
-  private Swal = inject(SweetAlertService)
+  private Swal = inject(SweetAlertService);
   private usersService = inject(UsersService);
   private messageService = inject(MessageService);
   private endpoint = `${environment.API_URL}/auth/sign-in`;

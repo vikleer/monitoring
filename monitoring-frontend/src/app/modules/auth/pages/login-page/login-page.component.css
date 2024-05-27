@@ -23,3 +23,8 @@
   margin-top: 10rem;
   z-index: 1;
 }
+
+.a-password {
+  cursor: pointer;
+  color: #8960AE;
+}

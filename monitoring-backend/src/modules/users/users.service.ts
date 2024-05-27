@@ -42,7 +42,7 @@ export class UsersService {
    * @returns A Promise that resolves to the found user.
    * @throws BadRequestException if the user is not found.
    */
-  public async findOne(userId: string): Promise<User> {
+  public async    findOne(userId: string): Promise<User> {
     // Find the user
     const user = await this.usersRepository.findOne({
       where: { id: userId },
